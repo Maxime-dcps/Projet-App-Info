@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Projet_mvc.Core.Infrastructure
 {
-    internal class PGSqlDbConnectionProvider
+    internal class PGSqlDbConnectionProvider : IDbConnectionProvider
     {
         private readonly string _connectionString;
 

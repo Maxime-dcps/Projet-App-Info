@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Projet_mvc.Core.Repository;
 using Projet_mvc.Models;
+using Projet_mvc.Models.Home;
 
 namespace Projet_mvc.Controllers
 {
@@ -8,13 +10,24 @@ namespace Projet_mvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IListingRepository _listingRepository;
+
+        public HomeController(IListingRepository listingRepository, ILogger<HomeController> logger)
         {
+            _listingRepository = listingRepository;
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var recentListings = await _listingRepository.GetRecentListingsAsync(5);
+
+            var viewModel = new HomePageViewModel
+            {
+                // Assigne les listes récupérées (le service retourne déjà le bon type de ViewModel)
+                PopularListings = recentListings.ToList(), // Utilise les listings récents ici
+            };
+
             return View();
         }
 

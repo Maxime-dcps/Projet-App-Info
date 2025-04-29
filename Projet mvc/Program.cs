@@ -1,3 +1,5 @@
+using Projet_mvc.Core.Infrastructure;
+
 namespace Projet_mvc
 {
     public class Program
@@ -5,6 +7,7 @@ namespace Projet_mvc
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddScoped<IDbConnectionProvider, PGSqlDbConnectionProvider>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
