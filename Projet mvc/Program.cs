@@ -1,4 +1,5 @@
 using Projet_mvc.Core.Infrastructure;
+using Projet_mvc.Core.Repository;
 
 namespace Projet_mvc
 {
@@ -8,6 +9,8 @@ namespace Projet_mvc
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddScoped<IDbConnectionProvider, PGSqlDbConnectionProvider>();
+            builder.Services.AddScoped<IListingRepository, DapperListingRepository>();
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

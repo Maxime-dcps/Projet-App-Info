@@ -24,11 +24,10 @@ namespace Projet_mvc.Controllers
 
             var viewModel = new HomePageViewModel
             {
-                // Assigne les listes récupérées (le service retourne déjà le bon type de ViewModel)
-                PopularListings = recentListings.ToList(), // Utilise les listings récents ici
+                RecentListings = recentListings
             };
 
-            return View();
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

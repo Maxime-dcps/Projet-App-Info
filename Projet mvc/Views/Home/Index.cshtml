@@ -1,8 +1,48 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Projet_mvc.Models.Home
+
+@model HomePageViewModel
+@{
+    ViewData["Title"] = "Accueil";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+
+    <!-- Section de Bienvenue Chaleureuse -->
+    <div class="text-center mb-5 p-4 bg-light rounded shadow-sm">
+        <h1 class="display-4">Bienvenue sur RetroSwap ! 🕹️</h1>
+        <p class="lead">Votre nouvelle destination pour acheter et vendre des trésors du jeu vidéo rétro entre passionnés.</p>
+        <p>Redécouvrez les consoles et les jeux qui ont marqué votre enfance. Prêt à chiner ?</p>
+        <hr class="my-4">
+    </div>
+
+    <!-- Section des Dernières Annonces -->
+    <h2 class="text-center mb-4">Fraîchement arrivés !</h2>
+
+    @if (Model.RecentListings != null && Model.RecentListings.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+            @foreach (var listing in Model.RecentListings)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
+                            <img src="@listing.PrimaryImageUrl" class="card-img-top" alt="@listing.PrimaryImageAlt" style="height: 200px; object-fit: cover;">
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none text-dark stretched-link">@listing.Title</a>
+                            </h5>
+                            <p class="card-text mt-auto mb-2 fs-5 fw-bold text-primary">@listing.Price.ToString("C")</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center" role="alert">
+            Il n'y a pas encore d'annonces récentes à afficher. Soyez le premier à vendre !
+        </div>
+    }
 </div>

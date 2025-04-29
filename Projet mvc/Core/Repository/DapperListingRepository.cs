@@ -57,10 +57,5 @@ namespace Projet_mvc.Core.Repository
 
             return result.ToList();
         }
-
-        public async Task<List<ListingSummaryViewModel>> GetPopularListingsAsync(int count)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
