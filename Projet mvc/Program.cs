@@ -1,19 +1,36 @@
 using Projet_mvc.Core.Infrastructure;
 using Projet_mvc.Core.Repository;
+using Projet_mvc.Core.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace Projet_mvc
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
+Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+
             var builder = WebApplication.CreateBuilder(args);
+
             builder.Services.AddScoped<IDbConnectionProvider, PGSqlDbConnectionProvider>();
             builder.Services.AddScoped<IListingRepository, DapperListingRepository>();
-
+            builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+            builder.Services.AddScoped<IUserRepository, DapperUserRepository>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Configuration de l'authentification par cookies
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.AccessDeniedPath = "/Account/AccessDenied";
+                    options.ExpireTimeSpan = TimeSpan.FromDays(14);
+                });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CreateProjectPolicy",
+                    policy => policy.RequireRole("Admin", "User"));
+            });
 
             var app = builder.Build();
 
@@ -30,13 +47,15 @@ namespace Projet_mvc
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            Console.WriteLine("L'application démarre bien...");
             app.Run();
-        }
-    }
-}
+            
+        
