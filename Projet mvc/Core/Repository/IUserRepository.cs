@@ -7,5 +7,11 @@ namespace Projet_mvc.Core.Repository
         Task<int> CreateUserAsync(User user);
         Task<bool> UsernameExist(string username);
         Task<User?> GetByUsernameAsync(string username);
+
+        Task<User?> GetByIdAsync(int userId);
+
+        Task<User?> UpdateUserAsync(User user);
+
+        Task<bool> DeleteUserAsync(int userId);
     }
 }
