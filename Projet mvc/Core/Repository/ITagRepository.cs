@@ -6,5 +6,6 @@ namespace Projet_mvc.Core.Repository
     {
         public Task<List<TagViewModel>> GetTagsByIdAsync(int id);
         public Task<List<TagViewModel>> GetAllTagsAsync();
+        public Task AddTagsToListingAsync(int newListingId, List<int> selectedTagsIds);
     }
 }

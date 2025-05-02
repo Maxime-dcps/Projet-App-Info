@@ -81,11 +81,17 @@ namespace Projet_mvc.Controllers
                 Price = model.Price,
                 UserId = user.User_Id,
                 IsAvailable = true,
-                CreationDate = DateTime.UtcNow
+                CreationDate = DateTime.Now
             };
 
-            await _listingRepository.CreateListingAsync(listing);
-            return RedirectToAction("Profile", "Account");
+            var newListingId = await _listingRepository.CreateListingAsync(listing);
+
+            if (model.SelectedTagIds != null && model.SelectedTagIds.Any())
+            {
+                await _tagRepository.AddTagsToListingAsync(newListingId, model.SelectedTagIds);
+            }
+
+                return RedirectToAction("Profile", "Account");
         }
     }
 

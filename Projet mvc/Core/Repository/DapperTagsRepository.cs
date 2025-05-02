@@ -43,5 +43,24 @@ namespace Projet_mvc.Core.Repository
 
             return result.ToList();
         }
+
+        public async Task AddTagsToListingAsync(int newListingId, List<int> selectedTagsIds)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+            const string sql = """
+                                INSERT INTO listing_tags (listing_id, tag_id)
+                                VALUES (@ListingId, @TagId)
+                                """;
+            foreach (var tagId in selectedTagsIds)
+            {
+                await connection.ExecuteAsync(sql, new { ListingId = newListingId, TagId = tagId });
+            }
+
+            // Alternatively, you can use a single query with multiple values
+
+            //var parameters = selectedTagsIds.Select(tagId => new { ListingId = newListingId, TagId = tagId }).ToList();
+
+            //await connection.ExecuteAsync(sql, parameters);
+        }
     }
 }
