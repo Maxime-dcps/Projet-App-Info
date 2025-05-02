@@ -7,5 +7,7 @@ namespace Projet_mvc.Core.Repository
     {
         public Task<List<ListingSummaryViewModel>> GetRecentListingsAsync(int count);
         public Task<Listing> GetListingByIdAsync(int id);
+        Task CreateListingAsync(Listing listing);
+        public Task<IEnumerable<Listing>> GetListingsByUserIdAsync(int userId);
     }
 }

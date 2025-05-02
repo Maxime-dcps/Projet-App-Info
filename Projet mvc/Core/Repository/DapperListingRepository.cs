@@ -58,18 +58,40 @@ namespace Projet_mvc.Core.Repository
             return result.ToList();
         }
 
+        public async Task CreateListingAsync(Listing listing)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+
+            const string sql = """
+                                INSERT INTO listings (title, description, price, user_id)
+                                VALUES (@Title, @Description, @Price, @UserId);
+                               """;
+
+            await connection.ExecuteAsync(sql, listing);
+        }
+
+        public async Task<IEnumerable<Listing>> GetListingsByUserIdAsync(int userId)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+
+            var sql = "SELECT * FROM listings WHERE user_id = @UserId";
+            return await connection.QueryAsync<Listing>(sql, new { UserId = userId });
+        }
+
+
+
         public async Task<Listing?> GetListingByIdAsync(int id)
         {
             using var connection = await _dbConnectionProvider.CreateConnection();
             const string sql = """
                                 SELECT 
-                                    l.listing_id AS ListingId,
+                                    l.listing_id AS Id,
                                     l.title AS Title,
                                     l.description AS Description,
                                     l.price AS Price,
                                     l.is_available AS IsAvailable,
                                     l.creation_date AS CreationDate,
-                                    u.user_id AS AuthorId,
+                                    u.user_id AS UserId,
                                     u.username AS AuthorName
                                 FROM listings l
                                 LEFT JOIN users u ON l.user_id = u.user_id
