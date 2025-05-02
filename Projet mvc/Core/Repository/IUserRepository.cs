@@ -6,6 +6,7 @@ namespace Projet_mvc.Core.Repository
     {
         Task<int> CreateUserAsync(User user);
         Task<bool> UsernameExist(string username);
+        Task<bool> EmailExist(string email);
         Task<User?> GetByUsernameAsync(string username);
 
         Task<User?> GetByIdAsync(int userId);

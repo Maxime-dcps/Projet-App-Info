@@ -18,12 +18,25 @@ namespace Projet_mvc.Core.Services
             _userRepository = userRepository;
         }
 
-        public async Task<bool> RegisterUserAsync(RegisterUserViewModel registerDto)
+        public async Task<ResultViewModel> RegisterUserAsync(RegisterUserViewModel registerDto)
         {
-            var existingUser = await _userRepository.UsernameExist(registerDto.Username);
+            if(await _userRepository.UsernameExist(registerDto.Username))
+            {
+                return new ResultViewModel
+                {
+                    Success = false,
+                    ErrorMessage = "Cet nom d'utilisateur est déjà utilisé."
+                };
+            }
 
-            if (existingUser)
-                return false;
+            if(await _userRepository.EmailExist(registerDto.Email))
+            {
+                return new ResultViewModel
+                {
+                    Success = false,
+                    ErrorMessage = "Cette adresse mail est déjà utilisée."
+                };
+            }
 
             var (hash, salt) = _passwordHasher.Hash(registerDto.Password);
 
@@ -38,7 +51,10 @@ namespace Projet_mvc.Core.Services
 
             await _userRepository.CreateUserAsync(user);
 
-            return true;
+            return new ResultViewModel
+            {
+                Success = true,
+            };
         }
 
         public async Task<User?> AuthenticateAsync(string username, string password)

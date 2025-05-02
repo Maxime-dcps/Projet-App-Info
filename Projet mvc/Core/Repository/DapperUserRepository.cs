@@ -34,6 +34,15 @@ namespace Projet_mvc.Core.Repository
                                                          SELECT EXISTS (SELECT * FROM users WHERE username = @username)
                                                          """, new { username });
         }
+        
+        public async Task<bool> EmailExist(string email)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+
+            return await connection.ExecuteScalarAsync<bool>("""
+                                                         SELECT EXISTS (SELECT * FROM users WHERE email = @email)
+                                                         """, new { email });
+        }
 
         public async Task<User?> GetByUsernameAsync(string username)
         {

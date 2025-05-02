@@ -41,10 +41,11 @@ namespace Projet_mvc.Controllers
             if (!ModelState.IsValid)
                 return View();
 
-            var success = await _authService.RegisterUserAsync(model);
-            if (!success)
+            var result = await _authService.RegisterUserAsync(model);
+            if (!result.Success)
             {
-                ModelState.AddModelError("", "Le nom d'utilisateur existe déjà");
+                ModelState.AddModelError("", result.ErrorMessage);
+
                 return View();
             }
 

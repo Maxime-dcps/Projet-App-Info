@@ -7,7 +7,7 @@ namespace Projet_mvc.Core.Services
 {
     public interface IAuthService
     {
-        Task<bool> RegisterUserAsync(RegisterUserViewModel model);
+        Task<ResultViewModel> RegisterUserAsync(RegisterUserViewModel model);
         Task<User?> AuthenticateAsync(string username, string password);
         ClaimsPrincipal CreateClaimsPrincipalAsync(User user);
     }
