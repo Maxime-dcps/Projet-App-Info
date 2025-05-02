@@ -1,18 +1,22 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Projet_mvc.Core.Infrastructure;
 using Projet_mvc.Core.Repository;
 using Projet_mvc.Core.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
-Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-
-
+namespace Projet_mvc
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
             var builder = WebApplication.CreateBuilder(args);
-
             builder.Services.AddScoped<IDbConnectionProvider, PGSqlDbConnectionProvider>();
             builder.Services.AddScoped<IListingRepository, DapperListingRepository>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
             builder.Services.AddScoped<IUserRepository, DapperUserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IImageRepository, DapperImageRepository>();
+            builder.Services.AddScoped<ITagRepository, DapperTagsRepository>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -47,15 +51,13 @@ Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
             app.UseRouting();
 
-            app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            Console.WriteLine("L'application démarre bien...");
             app.Run();
-            
-        
+        }
+    }
+}

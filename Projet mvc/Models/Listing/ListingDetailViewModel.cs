@@ -3,16 +3,7 @@
     public class ListingDetailViewModel
     {
         // Listing informations
-        public int ListingId { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public int Price { get; set; }
-        public bool IsAvailable { get; set; }   // Indicates if the listing is available for purchase
-        public DateTime CreationDate { get; set; }
-
-        // Author informations
-        public int AuthorId { get; set; }
-        public string AuthorName { get; set; }
+        public Projet_mvc.Core.Domain.Listing ListingData { get; set; } // Complete name to avoid confusion with the name of the directory
 
         // Images and tags
         public List<ImageViewModel> Images { get; set; }

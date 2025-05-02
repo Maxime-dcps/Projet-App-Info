@@ -57,5 +57,27 @@ namespace Projet_mvc.Core.Repository
 
             return result.ToList();
         }
+
+        public async Task<Listing?> GetListingByIdAsync(int id)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+            const string sql = """
+                                SELECT 
+                                    l.listing_id AS ListingId,
+                                    l.title AS Title,
+                                    l.description AS Description,
+                                    l.price AS Price,
+                                    l.is_available AS IsAvailable,
+                                    l.creation_date AS CreationDate,
+                                    u.user_id AS AuthorId,
+                                    u.username AS AuthorName
+                                FROM listings l
+                                LEFT JOIN users u ON l.user_id = u.user_id
+                                WHERE l.listing_id = @Id AND l.is_available = true;
+                                """;
+            var result = await connection.QueryFirstOrDefaultAsync<Listing>(sql, new { Id = id });
+            return result;
+
+        }
     }
 }

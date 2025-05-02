@@ -16,9 +16,10 @@ namespace Projet_mvc.Core.Repository
             using var connection = await _dbConnectionProvider.CreateConnection();
             const string sql = """
                                 SELECT 
-                                    tag_id AS TagId,
-                                    tag_name AS TagName
-                                FROM tags
+                                    l.tag_id AS Id,
+                                    t.label AS Label
+                                FROM listing_tags l
+                                INNER JOIN tags t ON l.tag_id = t.tag_id
                                 WHERE listing_id = @Id
                                 """;
 
