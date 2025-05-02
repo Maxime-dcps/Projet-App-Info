@@ -55,7 +55,7 @@ namespace Projet_mvc.Core.Repository
 
 
 
-            const string sql = @"
+            const string sql = """
                                 UPDATE users
                                 SET
                                 username = @Username,
@@ -63,6 +63,7 @@ namespace Projet_mvc.Core.Repository
                                 password_hash = @Password_Hash,
                                 salt = @Salt
                                 WHERE user_id = @User_Id";
+                                """;
 
             var parameters = new
             {

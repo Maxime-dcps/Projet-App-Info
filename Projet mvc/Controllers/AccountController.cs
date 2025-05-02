@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Projet_mvc.Core.Repository;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Projet_mvc.Core.Domain;
 
 
 namespace Projet_mvc.Controllers
@@ -18,11 +19,14 @@ namespace Projet_mvc.Controllers
         private readonly IAuthService _authService;
         private readonly IPasswordHasher _passwordHasher;
 
-        public AccountController(IUserRepository userRepository, IAuthService authService, IPasswordHasher passwordHasher)
+        private readonly IListingRepository _listingRepository;
+
+        public AccountController(IUserRepository userRepository, IAuthService authService, IPasswordHasher passwordHasher, IListingRepository listingRepository)
         {
             _userRepository = userRepository;
             _authService = authService;
             _passwordHasher = passwordHasher;
+            _listingRepository = listingRepository;
         }
 
         // GET
@@ -77,6 +81,7 @@ namespace Projet_mvc.Controllers
                     //ExpiresUtc = DateTime.UtcNow.AddDays(model.RememberMe ? 14 : 1)
                 });
 
+
             if (Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
             else
@@ -104,13 +109,17 @@ namespace Projet_mvc.Controllers
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null) return NotFound();
 
+            var userListings = await _listingRepository.GetListingsByUserIdAsync(userId);
+
             var viewModel = new UserViewModel
             {
                 User_Id = user.User_Id,
                 Username = user.Username,
                 Email = user.Email,
                 Role = user.Role,
-                Creation_Date = user.Creation_Date
+                Creation_Date = user.Creation_Date,
+                User = user,
+                Listings = userListings.ToList()
             };
 
             return View(viewModel);

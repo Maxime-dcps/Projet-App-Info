@@ -1,4 +1,7 @@
-﻿namespace Projet_mvc.Models.User
+﻿using ListingModel = Projet_mvc.Core.Domain.Listing;
+using DomainUser = Projet_mvc.Core.Domain.User;
+
+namespace Projet_mvc.Models.User
 {
     public class UserViewModel
     {
@@ -7,5 +10,9 @@
         public string Email { get; set; }
         public string Role { get; set; }
         public DateTime Creation_Date { get; set; }
+
+
+        public DomainUser User { get; set; }
+        public List<ListingModel> Listings { get; set; }
     }
 }

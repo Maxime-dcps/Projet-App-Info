@@ -40,3 +40,24 @@
         </div>
     </div>
 </div>
+
+
+<h3>Mes annonces</h3>
+
+@if (Model.Listings.Any())
+{
+    <ul class="list-group">
+        @foreach (var listing in Model.Listings)
+        {
+            <li class="list-group-item">
+                <strong>@listing.Title</strong><br />
+                @listing.Price € - @listing.creationDate.ToString("dd/MM/yyyy")<br />
+                <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.Id">Voir</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Vous n'avez publié aucune annonce.</p>
+}
