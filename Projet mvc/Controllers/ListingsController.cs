@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Projet_mvc.Core.Domain;
 using Projet_mvc.Core.Repository;
 using Projet_mvc.Models.Listing;
@@ -44,9 +45,20 @@ namespace Projet_mvc.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var allTags = await _tagRepository.GetAllTagsAsync();
+
+            var model = new CreateListingViewModel
+            {
+                AvailableTags = allTags.Select(tag => new SelectListItem
+                {
+                    Value = tag.Id.ToString(),
+                    Text = tag.Label
+                }).ToList()
+            };
+
+            return View(model);
         }
 
         [HttpPost]

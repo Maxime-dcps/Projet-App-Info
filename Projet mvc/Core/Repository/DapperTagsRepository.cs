@@ -27,5 +27,21 @@ namespace Projet_mvc.Core.Repository
 
             return result.ToList();
         }
+
+        public async Task<List<TagViewModel>> GetAllTagsAsync()
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+
+            const string sql = """
+                                SELECT 
+                                    tag_id AS Id,
+                                    label AS Label
+                                FROM tags
+                                """;
+
+            var result = await connection.QueryAsync<TagViewModel>(sql);
+
+            return result.ToList();
+        }
     }
 }
