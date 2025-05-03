@@ -62,5 +62,17 @@ namespace Projet_mvc.Core.Repository
 
             //await connection.ExecuteAsync(sql, parameters);
         }
+
+        public async Task UpdateTagsToListingAsync(int listingId, List<int> selectedTagsIds)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+            const string sql = """
+                                DELETE FROM listing_tags
+                                WHERE listing_id = @ListingId
+                                """;
+            await connection.ExecuteAsync(sql, new { ListingId = listingId });
+            
+            AddTagsToListingAsync(listingId, selectedTagsIds).Wait();
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace Projet_mvc.Core.Repository
         public Task<Listing> GetListingByIdAsync(int id);
         Task<int> CreateListingAsync(Listing listing);
         public Task<IEnumerable<Listing>> GetListingsByUserIdAsync(int userId);
+        public Task<int> UpdateListingAsync(Listing listing);
     }
 }

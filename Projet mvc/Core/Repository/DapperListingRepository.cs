@@ -115,5 +115,21 @@ namespace Projet_mvc.Core.Repository
             return result;
 
         }
+
+        public async Task<int> UpdateListingAsync(Listing listing)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+            const string sql = """
+                                UPDATE listings
+                                SET title = @Title,
+                                    description = @Description,
+                                    price = @Price,
+                                    is_available = @IsAvailable
+                                WHERE listing_id = @Id;
+                               """;
+            var rows = await connection.ExecuteAsync(sql, listing);
+
+            return rows;
+        }
     }
 }

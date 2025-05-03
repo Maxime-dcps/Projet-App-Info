@@ -3,8 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Projet_mvc.Models.Listing
 {
-    public class CreateListingViewModel
+    public class ListingFormViewModel
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "Le titre est obligatoire"), MaxLength(100, ErrorMessage = "Votre titre est trop long")]
         public string Title { get; set; }
         public string Description { get; set; }

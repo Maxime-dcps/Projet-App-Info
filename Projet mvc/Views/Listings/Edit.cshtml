@@ -1,14 +1,14 @@
 ﻿@model Projet_mvc.Models.Listing.ListingFormViewModel
 
 
-<h2>Créer une annonce</h2>
+<h2>Modifier cette annonce</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Edit" method="post">
 
     <partial name="_ListingForm" model="Model" />
 
     <div class="mt-4">
-        <button type="submit" class="btn btn-success">Créer l'annonce</button>
+        <button type="submit" class="btn btn-success">Modifier l'annonce</button>
         <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Annuler</a>
     </div>
 </form>

@@ -49,7 +49,7 @@ namespace Projet_mvc.Controllers
         {
             var allTags = await _tagRepository.GetAllTagsAsync();
 
-            var model = new CreateListingViewModel
+            var model = new ListingFormViewModel
             {
                 AvailableTags = allTags.Select(tag => new SelectListItem
                 {
@@ -63,7 +63,7 @@ namespace Projet_mvc.Controllers
 
         [HttpPost]
         
-        public async Task<IActionResult> Create(CreateListingViewModel model)
+        public async Task<IActionResult> Create(ListingFormViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -92,6 +92,76 @@ namespace Projet_mvc.Controllers
             }
 
                 return RedirectToAction("Profile", "Account");
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var username = User.Identity?.Name;
+            var user = await _userRepository.GetByUsernameAsync(username);
+
+            if (user == null)
+                return RedirectToAction("Login", "Account");
+
+            var listing = await _listingRepository.GetListingByIdAsync(id);
+
+            if (listing == null)
+                return NotFound();
+
+            if (listing.UserId != user.User_Id && user.Role != "Admin")
+                return Forbid();
+
+            var allTags = await _tagRepository.GetAllTagsAsync();
+
+            var selectedTags = await _tagRepository.GetTagsByIdAsync(id);
+
+            var model = new ListingFormViewModel
+            {
+                Id = listing.Id,
+                Title = listing.Title,
+                Description = listing.Description,
+                Price = listing.Price,
+
+                AvailableTags = allTags.Select(tag => new SelectListItem
+                {
+                    Value = tag.Id.ToString(),
+                    Text = tag.Label,
+                    Selected = selectedTags.Any(t => t.Id == tag.Id)
+                }).ToList()
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ListingFormViewModel model)
+        {
+            var username = User.Identity?.Name;
+            var user = await _userRepository.GetByUsernameAsync(username);
+
+            if (user == null)
+                return RedirectToAction("Login", "Account");
+
+            var listing = await _listingRepository.GetListingByIdAsync(model.Id);
+
+            if (listing == null)
+                return NotFound();
+
+            if (listing.UserId != user.User_Id && user.Role != "Admin")
+                return Forbid();
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            listing.Title = model.Title;
+            listing.Description = model.Description;
+            listing.Price = model.Price;
+
+            await _listingRepository.UpdateListingAsync(listing);
+
+            if (model.SelectedTagIds != null && model.SelectedTagIds.Any())
+            {
+                await _tagRepository.UpdateTagsToListingAsync(model.Id, model.SelectedTagIds);
+            }
+            return RedirectToAction("Profile", "Account");
         }
     }
 
