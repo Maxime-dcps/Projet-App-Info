@@ -13,5 +13,6 @@ namespace Projet_mvc.Models.Listing
         public decimal Price { get; set; }
         public List<SelectListItem>? AvailableTags { get; set; }
         public List<int>? SelectedTagIds { get; set; }
+        public List<IFormFile>? Images { get; set; }
     }
 }

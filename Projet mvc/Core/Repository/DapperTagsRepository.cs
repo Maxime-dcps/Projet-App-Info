@@ -56,7 +56,7 @@ namespace Projet_mvc.Core.Repository
                 await connection.ExecuteAsync(sql, new { ListingId = newListingId, TagId = tagId });
             }
 
-            // Alternatively, you can use a single query with multiple values
+            // You can use a single query with multiple values
 
             //var parameters = selectedTagsIds.Select(tagId => new { ListingId = newListingId, TagId = tagId }).ToList();
 

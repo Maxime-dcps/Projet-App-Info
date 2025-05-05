@@ -1,6 +1,7 @@
 ﻿using Projet_mvc.Core.Infrastructure;
 using Projet_mvc.Models;
 using Dapper;
+using Projet_mvc.Core.Domain;
 
 
 namespace Projet_mvc.Core.Repository
@@ -32,6 +33,16 @@ namespace Projet_mvc.Core.Repository
             var result = await connection.QueryAsync<ImageViewModel>(sql, new { Id = id });
 
             return result.ToList();
+        }
+
+        public async Task AddImageAsync(Image model)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+            const string sql = """
+                                INSERT INTO images (listing_id, file_path, alt_text, image_order, upload_date)
+                                VALUES (@ListingId, @FilePath, @AltText, @ImageOrder, @UploadDate);
+                                """;
+            await connection.ExecuteAsync(sql, model);
         }
     }
 }
