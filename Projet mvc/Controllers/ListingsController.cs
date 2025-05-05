@@ -142,19 +142,13 @@ namespace Projet_mvc.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var username = User.Identity?.Name;
-            var user = await _userRepository.GetByUsernameAsync(username);
-
-            if (user == null)
-                return RedirectToAction("Login", "Account");
+            var authorizationResult = await CheckListingAuthorizationAsync(id);
+            if (authorizationResult != null)
+            {
+                return authorizationResult;
+            }
 
             var listing = await _listingRepository.GetListingByIdAsync(id);
-
-            if (listing == null)
-                return NotFound();
-
-            if (listing.UserId != user.User_Id && user.Role != "Admin")
-                return Forbid();
 
             var allTags = await _tagRepository.GetAllTagsAsync();
 
@@ -180,19 +174,13 @@ namespace Projet_mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ListingFormViewModel model)
         {
-            var username = User.Identity?.Name;
-            var user = await _userRepository.GetByUsernameAsync(username);
-
-            if (user == null)
-                return RedirectToAction("Login", "Account");
+            var authorizationResult = await CheckListingAuthorizationAsync(model.Id);
+            if (authorizationResult != null)
+            {
+                return authorizationResult;
+            }
 
             var listing = await _listingRepository.GetListingByIdAsync(model.Id);
-
-            if (listing == null)
-                return NotFound();
-
-            if (listing.UserId != user.User_Id && user.Role != "Admin")
-                return Forbid();
 
             if (!ModelState.IsValid)
                 return View(model);
@@ -209,6 +197,20 @@ namespace Projet_mvc.Controllers
             }
             return RedirectToAction("Profile", "Account");
         }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var authorizationResult = await CheckListingAuthorizationAsync(id);
+            if (authorizationResult != null)
+            {
+                return authorizationResult;
+            }
+
+            await _listingRepository.DeleteListingAsync(id);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         private void ValidateUploadedImages(List<IFormFile>? images)
         {
             long maxFileSize = 5 * 1024 * 1024; // 5 MB
@@ -274,6 +276,34 @@ namespace Projet_mvc.Controllers
 
                 await _imageRepository.AddImageAsync(imageEntity);
             }
+        }
+
+        private async Task<IActionResult?> CheckListingAuthorizationAsync(int listingId)
+        {
+            var username = User.Identity?.Name;
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userRepository.GetByUsernameAsync(username);
+            if (user == null)
+            {
+                return Forbid();
+            }
+
+            var listing = await _listingRepository.GetListingByIdAsync(listingId);
+            if (listing == null)
+            {
+                return NotFound();
+            }
+
+            if (listing.UserId != user.User_Id && user.Role != "Admin")
+            {
+                return Forbid();
+            }
+
+            return null;
         }
     }
 }

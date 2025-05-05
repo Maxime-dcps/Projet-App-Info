@@ -131,5 +131,21 @@ namespace Projet_mvc.Core.Repository
 
             return rows;
         }
+
+        public async Task<bool> DeleteListingAsync(int id)
+        {
+            // Soft delete: set is_available to false
+
+            // TODO: hard delete after a certain period
+
+            using var connection = await _dbConnectionProvider.CreateConnection();
+            const string sql = """
+                                UPDATE listings
+                                SET is_available = false
+                                WHERE listing_id = @Id;
+                               """;
+            var rows = await connection.ExecuteAsync(sql, new { Id = id });
+            return rows > 0;
+        }
     }
 }
