@@ -32,7 +32,7 @@ namespace Projet_mvc
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("CreateProjectPolicy",
+                options.AddPolicy("CreateListingPolicy",
                     policy => policy.RequireRole("Admin", "User"));
             });
 

@@ -48,7 +48,20 @@ namespace Projet_mvc.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var listings = await _listingRepository.GetAllListingsAsync();
+
+            var model = new ListingIndexViewModel
+            {
+                Listings = listings
+            };
+
+            return View(model);
+        }
+
         [HttpGet]
+        [Authorize(Policy = "CreateListingPolicy")]
         public async Task<IActionResult> Create()
         {
             var allTags = await _tagRepository.GetAllTagsAsync();
@@ -66,7 +79,7 @@ namespace Projet_mvc.Controllers
         }
 
         [HttpPost]
-        
+        [Authorize(Policy = "CreateListingPolicy")]
         public async Task<IActionResult> Create(ListingFormViewModel model)
         {
 
@@ -79,14 +92,10 @@ namespace Projet_mvc.Controllers
                 ModelState.AddModelError("", "Échec de l'envoi : Veuillez réessayer avec moins d'images ou des images plus petites.");
 
                 await RePopulateAvailableTags(errorViewModel);
-
                 return View(errorViewModel);
             }
 
-            var username = User.Identity?.Name;
-            var user = await _userRepository.GetByUsernameAsync(username);
-
-            if (user == null) return RedirectToAction("Login", "Account");
+            var user = await _userRepository.GetByUsernameAsync(User.Identity.Name);
 
             ValidateUploadedImages(model.Images); // Validate the uploaded images
 
@@ -95,7 +104,6 @@ namespace Projet_mvc.Controllers
                 await RePopulateAvailableTags(model);
                 return View(model);
             }
-
 
             var listing = new Listing
             {
@@ -117,10 +125,9 @@ namespace Projet_mvc.Controllers
             if (model.Images != null && model.Images.Any())
             {
                 await SaveUploadedImagesAsync(model.Images, newListingId);
-
             }
 
-                return RedirectToAction("Profile", "Account");
+            return RedirectToAction("Profile", "Account");
         }
 
         private async Task RePopulateAvailableTags(ListingFormViewModel model)

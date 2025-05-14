@@ -1,0 +1,90 @@
+﻿@using Projet_mvc.Models.Listing;
+
+@model ListingIndexViewModel
+@{
+    ViewData["Title"] = "Nos Trésors Rétro";
+}
+
+<div class="container my-5">
+    @* Ajout de marge en haut et en bas du conteneur principal *@
+
+    <div class="text-center mb-5 p-4 bg-light rounded shadow-sm">
+        <h1 class="display-4">Explorez notre Collection Rétro !</h1>
+        @* Texte d'introduction plus engageant et pertinent *@
+        <p class="lead text-muted">
+            Plongez dans un univers de nostalgie ! Parcourez nos annonces pour dénicher la console ou le jeu vidéo rétro de vos rêves,
+            proposé par notre communauté de passionnés.
+        </p>
+    </div>
+
+    @* Optionnel : Barre de Recherche/Filtres (simple exemple) *@
+    @*
+    <div class="row mb-4">
+        <div class="col-md-8 offset-md-2">
+            <form asp-controller="Listings" asp-action="Index" method="get">
+                <div class="input-group">
+                    <input type="text" name="searchString" class="form-control" placeholder="Rechercher une console, un jeu..." value="@ViewData["CurrentFilter"]" />
+                    <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i> Rechercher</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    *@
+
+    @if (Model.Listings != null && Model.Listings.Any())
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var listing in Model.Listings)
+            {
+                <div class="col d-flex align-items-stretch">
+                    @* align-items-stretch pour des cartes de même hauteur si contenu variable *@
+                    <div class="card shadow-sm h-100">
+                        @* h-100 pour que la carte remplisse la hauteur du col *@
+                        <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
+                            <img src="@listing.PrimaryImageUrl" class="card-img-top" alt="@listing.PrimaryImageAlt" style="height: 220px; object-fit: cover;"> @* Hauteur ajustée *@
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            @* flex-column pour pousser le prix/bouton en bas *@
+                            <h5 class="card-title mb-1">
+                                @* Lien "invisible" qui couvre le titre pour le rendre cliquable *@
+                                <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none text-dark stretched-link">
+                                    @listing.Title
+                                </a>
+                            </h5>
+                            <div class="mt-auto d-flex justify-content-between align-items-center pt-2">
+                                <p class="card-text fs-5 fw-bold text-primary mb-0">@listing.Price.ToString("C")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="col-12 text-center mt-5">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Oups !</h4>
+                <p>Il semble qu'il n'y ait aucune annonce correspondant à vos critères pour le moment.</p>
+                <hr>
+                <p class="mb-0">Revenez bientôt ou soyez le premier à <a asp-controller="Listings" asp-action="Create" class="alert-link">vendre un article</a> !</p>
+            </div>
+        </div>
+    }
+
+
+    @* Optionnel: Pagination ici si vous avez beaucoup d'annonces *@
+    @*
+    <div class="mt-5 d-flex justify-content-center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")"><a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)">Précédent</a></li>
+                // Logique pour afficher les numéros de page
+                <li class="page-item @(Model.HasNextPage ? "" : "disabled")"><a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)">Suivant</a></li>
+            </ul>
+        </nav>
+    </div>
+    *@
+
+</div>
+
