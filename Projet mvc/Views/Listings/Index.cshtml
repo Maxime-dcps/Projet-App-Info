@@ -31,6 +31,39 @@
     </div>
     *@
 
+    <hr />
+    <h3>Tags existants</h3>
+    @if (Model.Tags != null && Model.Tags.Any())
+
+    {
+        <ul class="list-inline">
+            @foreach (var tag in Model.Tags)
+
+            {
+                <li class="list-inline-item badge bg-secondary">@tag.Label</li>
+            }
+        </ul>
+    }
+
+    else
+
+    {
+        <p>Aucun tag enregistré.</p>
+    }
+
+    @if (User.IsInRole("Admin"))
+    {
+        <hr />
+        <h3>Ajouter un nouveau tag</h3>
+        <form asp-controller="Tags" asp-action="Create" method="post">
+            <div class="input-group mb-3">
+                <input type="text" name="Label" class="form-control" placeholder="Nom du tag..." required />
+                <button class="btn btn-success" type="submit">Créer</button>
+            </div>
+        </form>
+    }
+
+
     @if (Model.Listings != null && Model.Listings.Any())
     {
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">

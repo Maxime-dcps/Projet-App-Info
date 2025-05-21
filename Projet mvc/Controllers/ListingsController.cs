@@ -51,14 +51,18 @@ namespace Projet_mvc.Controllers
         public async Task<IActionResult> Index()
         {
             var listings = await _listingRepository.GetAllListingsAsync();
+            var tags = await _tagRepository.GetAllTagsAsync();
 
             var model = new ListingIndexViewModel
             {
-                Listings = listings
+                Listings = listings,
+                Tags = tags.ToList(), 
+                NewTag = new TagViewModel()
             };
 
             return View(model);
         }
+
 
         [HttpGet]
         [Authorize(Policy = "CreateListingPolicy")]

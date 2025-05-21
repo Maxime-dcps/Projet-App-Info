@@ -71,7 +71,7 @@ namespace Projet_mvc.Core.Repository
                                 email = @Email,
                                 password_hash = @Password_Hash,
                                 salt = @Salt
-                                WHERE user_id = @User_Id";
+                                WHERE user_id = @User_Id
                                 """;
 
             var parameters = new

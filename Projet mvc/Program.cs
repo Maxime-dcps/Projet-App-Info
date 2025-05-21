@@ -26,14 +26,17 @@ namespace Projet_mvc
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/Account/Login";
-                    options.AccessDeniedPath = "/Account/AccessDenied";
-                    options.ExpireTimeSpan = TimeSpan.FromDays(14);
+                    
                 });
+
 
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("CreateListingPolicy",
                     policy => policy.RequireRole("Admin", "User"));
+
+                options.AddPolicy("CreateTagsPolicy",
+                    policy => policy.RequireRole("Admin"));
             });
 
             var app = builder.Build();
@@ -42,7 +45,6 @@ namespace Projet_mvc
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -51,6 +53,7 @@ namespace Projet_mvc
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

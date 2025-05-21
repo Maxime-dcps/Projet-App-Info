@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Projet_mvc.Core.Domain;
 using Projet_mvc.Core.Infrastructure;
 using Projet_mvc.Models;
 
@@ -42,6 +43,21 @@ namespace Projet_mvc.Core.Repository
             var result = await connection.QueryAsync<TagViewModel>(sql);
 
             return result.ToList();
+        }
+
+        public async Task<int> CreateTagsAsync(Tags tags)
+        {
+            Console.WriteLine("CreateTagsAsync called");
+
+            using var connection = await _dbConnectionProvider.CreateConnection();
+
+            const string sql = """
+                                INSERT INTO tags (label)
+                                VALUES (@Label)
+                                RETURNING tag_id;
+                               """;
+
+            return await connection.ExecuteScalarAsync<int>(sql, tags);
         }
 
         public async Task AddTagsToListingAsync(int newListingId, List<int> selectedTagsIds)

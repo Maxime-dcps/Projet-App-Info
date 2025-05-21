@@ -73,14 +73,7 @@ namespace Projet_mvc.Controllers
 
             var principal = _authService.CreateClaimsPrincipalAsync(user);
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                principal,
-                new AuthenticationProperties
-                {
-                    //IsPersistent = model.RememberMe,
-                    //ExpiresUtc = DateTime.UtcNow.AddDays(model.RememberMe ? 14 : 1)
-                });
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal);
 
 
             if (Url.IsLocalUrl(returnUrl))
@@ -102,13 +95,22 @@ namespace Projet_mvc.Controllers
         public async Task<IActionResult> Profile()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null) return RedirectToAction("Login");
+            if (userIdClaim == null)
+            {
+                return RedirectToAction("Login");
+            }
 
             if (!int.TryParse(userIdClaim.Value, out var userId))
+            {
                 return RedirectToAction("Login");
+            }
+                
 
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null) return NotFound();
+            if (user == null)
+            {
+                return NotFound();
+            }
 
             var userListings = await _listingRepository.GetListingsByUserIdAsync(userId);
 
@@ -132,11 +134,18 @@ namespace Projet_mvc.Controllers
         {
 
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
-                return RedirectToAction("Login");
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))                            
+            { 
+                return RedirectToAction("Login"); 
+            }
 
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null) return NotFound();
+
+            if (user == null)
+            { 
+                return NotFound(); 
+            }
 
             var model = new EditUserViewModel
             {
