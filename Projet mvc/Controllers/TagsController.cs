@@ -29,6 +29,13 @@ namespace Projet_mvc.Controllers
                 return RedirectToAction("Index", "Listings");
             }
 
+            bool exists = await _tagRepository.TagExistsAsync(model.Label);
+            if (exists)
+            {
+                TempData["TagError"] = $"Le tag '{model.Label}' existe déjà.";
+                return RedirectToAction("Index", "Listings");
+            }
+
             var tag = new Tags
             {
                 Label = model.Label

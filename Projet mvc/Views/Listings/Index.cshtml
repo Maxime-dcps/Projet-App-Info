@@ -51,6 +51,14 @@
         <p>Aucun tag enregistré.</p>
     }
 
+    @if (TempData["TagError"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["TagError"]
+        </div>
+    }
+
+
     @if (User.IsInRole("Admin"))
     {
         <hr />

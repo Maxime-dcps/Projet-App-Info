@@ -47,7 +47,6 @@ namespace Projet_mvc.Core.Repository
 
         public async Task<int> CreateTagsAsync(Tags tags)
         {
-            Console.WriteLine("CreateTagsAsync called");
 
             using var connection = await _dbConnectionProvider.CreateConnection();
 
@@ -59,6 +58,18 @@ namespace Projet_mvc.Core.Repository
 
             return await connection.ExecuteScalarAsync<int>(sql, tags);
         }
+
+        public async Task<bool> TagExistsAsync(string label)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+
+            const string sql = @"SELECT 1 FROM tags WHERE LOWER(label) = LOWER(@Label) LIMIT 1;";
+
+            var exists = await connection.QueryFirstOrDefaultAsync<int?>(sql, new { Label = label });
+
+            return exists.HasValue;
+        }
+
 
         public async Task AddTagsToListingAsync(int newListingId, List<int> selectedTagsIds)
         {
