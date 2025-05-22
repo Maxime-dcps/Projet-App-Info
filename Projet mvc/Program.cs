@@ -17,6 +17,7 @@ namespace Projet_mvc
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IImageRepository, DapperImageRepository>();
             builder.Services.AddScoped<ITagRepository, DapperTagsRepository>();
+            builder.Services.AddScoped<IFavoriteRepository, DapperFavoriteRepository>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

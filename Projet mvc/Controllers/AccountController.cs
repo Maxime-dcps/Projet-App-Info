@@ -18,15 +18,16 @@ namespace Projet_mvc.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
         private readonly IPasswordHasher _passwordHasher;
-
         private readonly IListingRepository _listingRepository;
+        private readonly IFavoriteRepository _favoriteRepository;
 
-        public AccountController(IUserRepository userRepository, IAuthService authService, IPasswordHasher passwordHasher, IListingRepository listingRepository)
+        public AccountController(IUserRepository userRepository, IAuthService authService, IPasswordHasher passwordHasher, IListingRepository listingRepository, IFavoriteRepository favoriteRepository)
         {
             _userRepository = userRepository;
             _authService = authService;
             _passwordHasher = passwordHasher;
             _listingRepository = listingRepository;
+            _favoriteRepository = favoriteRepository;
         }
 
         // GET
@@ -114,6 +115,8 @@ namespace Projet_mvc.Controllers
 
             var userListings = await _listingRepository.GetListingsByUserIdAsync(userId);
 
+            var favorites = await _favoriteRepository.GetFavoritesForUserAsync(user.User_Id);
+
             var viewModel = new UserViewModel
             {
                 User_Id = user.User_Id,
@@ -122,7 +125,8 @@ namespace Projet_mvc.Controllers
                 Role = user.Role,
                 Creation_Date = user.Creation_Date,
                 User = user,
-                Listings = userListings.ToList()
+                Listings = userListings.ToList(),
+                FavoriteListings = favorites
             };
 
             return View(viewModel);
@@ -211,14 +215,19 @@ namespace Projet_mvc.Controllers
         {
             var username = User.Identity?.Name;
             if (string.IsNullOrEmpty(username))
+            {
                 return RedirectToAction("Login", "Account");
-
+            }
+               
             var user = await _userRepository.GetByUsernameAsync(username);
             if (user == null)
+            {
                 return NotFound();
+            }    
 
             // Suppression de l'utilisateur
             var deleted = await _userRepository.DeleteUserAsync(user.User_Id);
+
             if (deleted)
             {
                 // Déconnexion de l'utilisateur

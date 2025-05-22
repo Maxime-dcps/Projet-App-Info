@@ -1,7 +1,10 @@
-﻿namespace Projet_mvc.Core.Domain
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Projet_mvc.Core.Domain
 {
     public class Listing
     {
+        [Column("listing_id")]
         public int Id { get; set; }
         public int UserId { get; set; }
         public string Title { get; set; }

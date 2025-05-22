@@ -61,3 +61,23 @@ else
 {
     <p>Vous n'avez publié aucune annonce.</p>
 }
+
+
+<h3>Mes favoris</h3>
+@if (Model.FavoriteListings.Any())
+{
+    <ul class="list-group">
+        @foreach (var listing in Model.FavoriteListings)
+        {
+            <li class="list-group-item">
+                <strong>@listing.Title</strong><br />
+                @listing.Price € - @listing.CreationDate.ToString("dd/MM/yyyy")<br />
+                <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.Id">Voir</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Vous n'avez aucun favoris.</p>
+}

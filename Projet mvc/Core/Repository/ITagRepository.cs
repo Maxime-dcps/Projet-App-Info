@@ -7,8 +7,8 @@ namespace Projet_mvc.Core.Repository
     {
         public Task<List<TagViewModel>> GetTagsByIdAsync(int id);
         public Task<List<TagViewModel>> GetAllTagsAsync();
-        Task<int> CreateTagsAsync(Tags tags);
-        Task<bool> TagExistsAsync(string label);
+        public Task<int> CreateTagsAsync(Tags tags);
+        public Task<bool> TagExistsAsync(string label);
         public Task AddTagsToListingAsync(int newListingId, List<int> selectedTagsIds);
         public Task UpdateTagsToListingAsync(int listingId, List<int> selectedTagsIds);
     }

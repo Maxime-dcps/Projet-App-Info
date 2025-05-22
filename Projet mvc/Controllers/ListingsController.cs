@@ -17,14 +17,16 @@ namespace Projet_mvc.Controllers
         private readonly IImageRepository _imageRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IFavoriteRepository _favoriteRepository;
 
-        public ListingsController(IListingRepository listingRepository, IUserRepository userRepository, IImageRepository imageRepository, ITagRepository tagRepository, IWebHostEnvironment webHostEnvironment)
+        public ListingsController(IListingRepository listingRepository, IUserRepository userRepository, IImageRepository imageRepository, ITagRepository tagRepository, IWebHostEnvironment webHostEnvironment, IFavoriteRepository favoriteRepository)
         {
             _listingRepository = listingRepository;
             _userRepository = userRepository;
             _imageRepository = imageRepository;
             _tagRepository = tagRepository;
             _webHostEnvironment = webHostEnvironment; // used for image upload
+            _favoriteRepository = favoriteRepository;
         }
 
         public async Task<IActionResult> Details(int id)
@@ -38,11 +40,19 @@ namespace Projet_mvc.Controllers
             var images = await _imageRepository.GetImagesByIdAsync(id);
             var tags = await _tagRepository.GetTagsByIdAsync(id);
 
+            var user = await _userRepository.GetByUsernameAsync(User.Identity.Name);
+            bool isFavorited = false;
+            if (user != null)
+            {
+                isFavorited = await _favoriteRepository.ExistsAsync(user.User_Id, id);
+            }
+
             var model = new ListingDetailViewModel
             {
                 ListingData = listingData,
                 Images = images,
-                Tags = tags
+                Tags = tags,
+                IsFavorited = isFavorited
             };
 
             return View(model);

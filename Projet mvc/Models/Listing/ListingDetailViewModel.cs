@@ -8,5 +8,6 @@
         // Images and tags
         public List<ImageViewModel> Images { get; set; }
         public List<TagViewModel> Tags { get; set; }
+        public bool IsFavorited { get; set; }
     }
 }

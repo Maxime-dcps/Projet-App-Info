@@ -4,15 +4,15 @@ namespace Projet_mvc.Core.Repository
 {
     public interface IUserRepository
     {
-        Task<int> CreateUserAsync(User user);
-        Task<bool> UsernameExist(string username);
-        Task<bool> EmailExist(string email);
+        public Task<int> CreateUserAsync(User user);
+        public Task<bool> UsernameExist(string username);
+        public Task<bool> EmailExist(string email);
         Task<User?> GetByUsernameAsync(string username);
 
-        Task<User?> GetByIdAsync(int userId);
+        public Task<User?> GetByIdAsync(int userId);
 
-        Task<User?> UpdateUserAsync(User user);
+        public Task<User?> UpdateUserAsync(User user);
 
-        Task<bool> DeleteUserAsync(int userId);
+        public Task<bool> DeleteUserAsync(int userId);
     }
 }

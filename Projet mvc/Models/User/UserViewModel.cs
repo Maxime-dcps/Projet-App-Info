@@ -14,5 +14,6 @@ namespace Projet_mvc.Models.User
 
         public DomainUser User { get; set; }
         public List<ListingModel> Listings { get; set; }
+        public List<ListingModel> FavoriteListings { get; set; }
     }
 }
