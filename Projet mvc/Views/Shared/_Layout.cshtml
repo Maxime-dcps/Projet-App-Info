@@ -16,56 +16,59 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 
 </head>
-<body>
+<body class="bg-creme">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Projet_mvc</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/Logo.png" alt="Logo" style="height: 80px" />
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Profile">Mon Profil</a>
-                        </li>
+                    <ul class="navbar-nav flex-grow-1 align-items-center me-auto">       
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Listings" asp-action="Index">Annonces</a>
                         </li>
-                    </ul>
-                    <ul class="navbar-nav">
-
+                        
                         @if (User.Identity.IsAuthenticated)
-
                         {
-                            <li class="nav-item">
-                                <span class="nav-link text-dark">Bienvenue, @User.Identity.Name</span>
-                            </li>
-                            <li class="nav-item">
-                                <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" method="post">
-                                    <button type="submit" class="nav-link btn btn-link text-dark">Se déconnecter</button>
-                                </form>
-                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Listings" asp-action="Create">Créer une annonce</a>
                             </li>
                         }
+                    </ul>
 
-                        else
 
-                        {
+                    <ul class="navbar-nav align-items-center">
+
+                        @if (User.Identity.IsAuthenticated)
+                        {                          
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">S'enregistrer</a>
+                                <span class="nav-link text-dark">Bienvenue, @User.Identity.Name</span>
                             </li>
+                            
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Se connecter</a>
+                                <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" method="post">                                   
+                                    <button type="submit" class="nav-link btn btn-link-profile">Se déconnecter</button>
+                                </form>
+                            </li>
+
+                            <liv class=" nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Profile">
+                                    <img src="~/images/user_placeholder.png" alt="Logo" style="height: 50px; border-radius: 50%;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profil" />
+                                </a>
+                            </liv>                           
+                        }
+                        else
+                        {                           
+                            <li class="nav-item">
+                                <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Login" method="post">
+                                    <button type="submit" class="nav-link btn btn-link-profile">Se connecter</button>
+                                    <img src="~/images/user_placeholder.png" alt="Logo" style="height: 50px; border-radius: 50%;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profil" />
+                                </form>
                             </li>
                             
                         }
@@ -80,14 +83,24 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="border-top footer text-muted align-items-center">
+        <div class="container ">
             &copy; 2025 - Projet_mvc - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!--Pour faire fonctionner les tooltips partout dans le projet-->
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

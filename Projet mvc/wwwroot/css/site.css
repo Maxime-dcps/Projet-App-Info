@@ -19,4 +19,54 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: floralwhite;
 }
+
+/* Style for navbar */
+.navbar .nav-link {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.navbar .nav-item img {
+    margin-left: 10px;
+}
+
+
+/* Style butons login/logout */
+.btn-link-profile {  
+    color: #171717;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-link-profile:hover { 
+    background-color: #b479bd;
+    color: #5c3338;
+    text-decoration: none;
+}
+
+
+
+
+
+/*Custom login page */
+.custom-link-register {
+    color: #0d6efd;
+    text-decoration: underline;
+}
+
+.custom-link-register:hover {
+    color: #0d6efd; 
+    text-decoration: underline;
+}
+
+.login-card {
+    
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
