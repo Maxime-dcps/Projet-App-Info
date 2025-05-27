@@ -41,7 +41,38 @@
     else
     {
         <div class="alert alert-info text-center" role="alert">
-            Il n'y a pas encore d'annonces récentes à afficher. Soyez le premier à vendre !
+            Aucune annonce à afficher dans cette section.
+        </div>
+    }
+
+    <!-- Section des annonces populaires -->
+    <h2 class="text-center mb-4">Fraîchement arrivés !</h2>
+
+    @if (Model.PopularListings != null && Model.PopularListings.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+            @foreach (var listing in Model.PopularListings)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
+                            <img src="@listing.PrimaryImageUrl" class="card-img-top" alt="@listing.PrimaryImageAlt" style="height: 200px; object-fit: cover;">
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none text-dark stretched-link">@listing.Title</a>
+                            </h5>
+                            <p class="card-text mt-auto mb-2 fs-5 fw-bold text-primary">@listing.Price.ToString("C")</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center" role="alert">
+            Aucune annonce à afficher dans cette section.
         </div>
     }
 </div>

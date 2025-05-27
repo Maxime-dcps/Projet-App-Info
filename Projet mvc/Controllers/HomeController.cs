@@ -21,10 +21,12 @@ namespace Projet_mvc.Controllers
         public async Task<IActionResult> Index()
         {
             var recentListings = await _listingRepository.GetRecentListingsAsync(5);
+            var popularListing = await  _listingRepository.GetPopularListingsAsync(5);
 
             var viewModel = new HomePageViewModel
             {
-                RecentListings = recentListings
+                RecentListings = recentListings,
+                PopularListings = popularListing
             };
 
             return View(viewModel);

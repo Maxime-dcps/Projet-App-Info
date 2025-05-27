@@ -78,8 +78,7 @@
                 <form asp-controller="Listings" asp-action="Index" method="get" class="sort-form d-flex align-items-center">
                     <label asp-for="Filter.SortOrder" class="form-label mb-0 me-2 text-nowrap">Trier par :</label>
                     <select asp-for="Filter.SortOrder" class="form-select w-auto">
-                        <option value="" selected="@(string.IsNullOrEmpty(Model.Filter?.SortOrder))">Défaut</option>
-                        <option value="date_desc" selected="@(Model.Filter?.SortOrder == "date_desc")">Plus Récent</option>
+                        <option value="date_desc" selected="@(Model.Filter?.SortOrder == "date_desc" || string.IsNullOrEmpty(Model.Filter?.SortOrder))">Plus Récent</option>
                         <option value="date_asc" selected="@(Model.Filter?.SortOrder == "date_asc")">Plus Ancien</option>
                         <option value="price_asc" selected="@(Model.Filter?.SortOrder == "price_asc")">Prix Croissant</option>
                         <option value="price_desc" selected="@(Model.Filter?.SortOrder == "price_desc")">Prix Décroissant</option>
@@ -154,6 +153,5 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
     <script src="~/js/listings-index.js"></script>
 }
