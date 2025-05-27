@@ -2,130 +2,158 @@
 
 @model ListingIndexViewModel
 @{
-    ViewData["Title"] = "Nos Trésors Rétro";
+    ViewData["Title"] = "Perles Rétro à Collectionner";
 }
 
 <div class="container my-5">
-    @* Ajout de marge en haut et en bas du conteneur principal *@
-
-    <div class="text-center mb-5 p-4 bg-light rounded shadow-sm">
-        <h1 class="display-4">Explorez notre Collection Rétro !</h1>
-        @* Texte d'introduction plus engageant et pertinent *@
-        <p class="lead text-muted">
-            Plongez dans un univers de nostalgie ! Parcourez nos annonces pour dénicher la console ou le jeu vidéo rétro de vos rêves,
-            proposé par notre communauté de passionnés.
-        </p>
-    </div>
-
-    @* Optionnel : Barre de Recherche/Filtres (simple exemple) *@
-    @*
-    <div class="row mb-4">
-        <div class="col-md-8 offset-md-2">
-            <form asp-controller="Listings" asp-action="Index" method="get">
-                <div class="input-group">
-                    <input type="text" name="searchString" class="form-control" placeholder="Rechercher une console, un jeu..." value="@ViewData["CurrentFilter"]" />
-                    <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i> Rechercher</button>
-                </div>
-            </form>
+    <div class="page-hero-section">
+        <div class="container-fluid py-2">
+            <h2>Explorez nos annonces rétro uniques</h2>
+            <p>Explorez notre vaste catalogue d'annonces uniques.</p>
         </div>
     </div>
-    *@
+    <hr class="my-5">
 
-    <hr />
-    <h3>Tags existants</h3>
-    @if (Model.Tags != null && Model.Tags.Any())
-
-    {
-        <ul class="list-inline">
-            @foreach (var tag in Model.Tags)
-
-            {
-                <li class="list-inline-item badge bg-secondary">@tag.Label</li>
-            }
-        </ul>
-    }
-
-    else
-
-    {
-        <p>Aucun tag enregistré.</p>
-    }
-
-    @if (TempData["TagError"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["TagError"]
-        </div>
-    }
-
-
-    @if (User.IsInRole("Admin"))
-    {
-        <hr />
-        <h3>Ajouter un nouveau tag</h3>
-        <form asp-controller="Tags" asp-action="Create" method="post">
-            <div class="input-group mb-3">
-                <input type="text" name="Label" class="form-control" placeholder="Nom du tag..." required />
-                <button class="btn btn-success" type="submit">Créer</button>
-            </div>
-        </form>
-    }
-
-
-    @if (Model.Listings != null && Model.Listings.Any())
-    {
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            @foreach (var listing in Model.Listings)
-            {
-                <div class="col d-flex align-items-stretch">
-                    @* align-items-stretch pour des cartes de même hauteur si contenu variable *@
-                    <div class="card shadow-sm h-100">
-                        @* h-100 pour que la carte remplisse la hauteur du col *@
-                        <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
-                            <img src="@listing.PrimaryImageUrl" class="card-img-top" alt="@listing.PrimaryImageAlt" style="height: 220px; object-fit: cover;"> @* Hauteur ajustée *@
-                        </a>
-                        <div class="card-body d-flex flex-column">
-                            @* flex-column pour pousser le prix/bouton en bas *@
-                            <h5 class="card-title mb-1">
-                                @* Lien "invisible" qui couvre le titre pour le rendre cliquable *@
-                                <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none text-dark stretched-link">
-                                    @listing.Title
-                                </a>
-                            </h5>
-                            <div class="mt-auto d-flex justify-content-between align-items-center pt-2">
-                                <p class="card-text fs-5 fw-bold text-primary mb-0">@listing.Price.ToString("C")</p>
+    <div class="row g-4">
+        <div class="col-md-4 col-lg-3 sticky-filter-sidebar">
+            <div class="filter-card h-100">
+                <div class="card-body p-3">
+                    <h6 class="card-title mb-3 text-primary"><i class="bi bi-funnel me-2"></i>Affiner la recherche</h6>
+                    <form asp-controller="Listings" asp-action="Index" method="get" class="row g-3">
+                        <div class="col-12 mb-2">
+                            <label asp-for="Filter.SearchTerm" class="form-label visually-hidden">Rechercher</label>
+                            <div class="input-group">
+                                <input asp-for="Filter.SearchTerm" class="form-control" placeholder="Rechercher..." />
+                                <button type="submit" class="btn btn-outline-secondary" title="Rechercher"><i class="bi bi-search"></i></button>
                             </div>
                         </div>
+
+                        <div class="col-12 mb-2">
+                            <label class="form-label visually-hidden">Prix</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
+                                <input asp-for="Filter.MinPrice" type="number" step="0.01" class="form-control" placeholder="Min" aria-label="Prix Minimum" />
+                                <input asp-for="Filter.MaxPrice" type="number" step="0.01" class="form-control" placeholder="Max" aria-label="Prix Maximum" />
+                            </div>
+                            <span asp-validation-for="Filter.MinPrice" class="text-danger d-block mt-1"></span>
+                            <span asp-validation-for="Filter.MaxPrice" class="text-danger d-block"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <hr class="my-3 filter-hr">
+                        </div>
+
+                        <div class="col-12 mb-2">
+                            @if (Model.Filter.AvailableTags != null && Model.Filter.AvailableTags.Any())
+                            {
+                                <div class="tags-scroll-area">
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @foreach (var tag in Model.Filter.AvailableTags)
+                                        {
+                                            <input type="checkbox" class="btn-check" autocomplete="off"
+                                                   value="@tag.Value" id="tag_@tag.Value" name="Filter.SelectedTagIds" checked="@tag.Selected">
+                                            <label class="btn btn-outline-primary btn-sm rounded-pill" for="tag_@tag.Value">@tag.Text</label>
+                                        }
+                                    </div>
+                                </div>
+                                <span asp-validation-for="Filter.SelectedTagIds" class="text-danger d-block mt-2"></span>
+                            }
+                            else
+                            {
+                                <p class="text-muted small">Aucun tag disponible.</p>
+                            }
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-between mt-2">
+                            <a asp-controller="Listings" asp-action="Index" class="btn btn-outline-secondary flex-grow-1 me-2">Réinitialiser</a>
+                            <button type="submit" class="btn btn-primary flex-grow-1">Appliquer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 col-lg-9">
+            <div class="d-flex justify-content-end align-items-center mb-4">
+                <form asp-controller="Listings" asp-action="Index" method="get" class="sort-form d-flex align-items-center">
+                    <label asp-for="Filter.SortOrder" class="form-label mb-0 me-2 text-nowrap">Trier par :</label>
+                    <select asp-for="Filter.SortOrder" class="form-select w-auto">
+                        <option value="" selected="@(string.IsNullOrEmpty(Model.Filter?.SortOrder))">Défaut</option>
+                        <option value="date_desc" selected="@(Model.Filter?.SortOrder == "date_desc")">Plus Récent</option>
+                        <option value="date_asc" selected="@(Model.Filter?.SortOrder == "date_asc")">Plus Ancien</option>
+                        <option value="price_asc" selected="@(Model.Filter?.SortOrder == "price_asc")">Prix Croissant</option>
+                        <option value="price_desc" selected="@(Model.Filter?.SortOrder == "price_desc")">Prix Décroissant</option>
+                        <option value="popular" selected="@(Model.Filter?.SortOrder == "popular")">Populaire</option>
+                    </select>
+                    <input type="hidden" asp-for="Filter.SearchTerm" />
+                    <input type="hidden" asp-for="Filter.MinPrice" />
+                    <input type="hidden" asp-for="Filter.MaxPrice" />
+                    @if (Model.Filter.SelectedTagIds != null)
+                    {
+                        @foreach (var tagId in Model.Filter.SelectedTagIds)
+                        {
+                            <input type="hidden" name="Filter.SelectedTagIds" value="@tagId" />
+                        }
+                    }
+                </form>
+            </div>
+
+            @if (Model.Listings != null && Model.Listings.Any())
+            {
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-4">
+                    @foreach (var listing in Model.Listings)
+                    {
+                        <div class="col d-flex align-items-stretch">
+                            <div class="card listing-card h-100">
+                                <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
+                                    <img src="@listing.PrimaryImageUrl" class="card-img-top" alt="@listing.PrimaryImageAlt" style="height: 200px; object-fit: cover;">
+                                </a>
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title mb-2">
+                                        <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none text-dark stretched-link">
+                                            @listing.Title
+                                        </a>
+                                    </h5>
+                                    <div class="mt-auto pt-2">
+                                        <span class="card-text fs-4 fw-bold text-primary">@listing.Price.ToString("C")</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="alert alert-info" role="alert">
+                        <h4 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Aucun résultat trouvé !</h4>
+                        <p>Il semble qu'il n'y ait aucune annonce correspondant à vos critères de recherche.</p>
+                        <hr>
+                        <p class="mb-0">Essayez de modifier vos filtres ou de les réinitialiser.</p>
+                    </div>
+                </div>
+            }
+
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="card admin-tag-card mt-5 mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3 text-success"><i class="bi bi-tag-fill me-2"></i>Ajouter un Nouveau Tag</h6>
+                        <form asp-controller="Tags" asp-action="Create" method="post">
+                            <div class="input-group">
+                                <input type="text" name="Label" class="form-control" placeholder="Nouveau tag" required />
+                                <button class="btn btn-success" type="submit" title="Créer le tag"><i class="bi bi-plus-circle-fill"></i></button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             }
         </div>
-    }
-    else
-    {
-        <div class="col-12 text-center mt-5">
-            <div class="alert alert-info" role="alert">
-                <h4 class="alert-heading">Oups !</h4>
-                <p>Il semble qu'il n'y ait aucune annonce correspondant à vos critères pour le moment.</p>
-                <hr>
-                <p class="mb-0">Revenez bientôt ou soyez le premier à <a asp-controller="Listings" asp-action="Create" class="alert-link">vendre un article</a> !</p>
-            </div>
-        </div>
-    }
-
-
-    @* Optionnel: Pagination ici si vous avez beaucoup d'annonces *@
-    @*
-    <div class="mt-5 d-flex justify-content-center">
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")"><a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)">Précédent</a></li>
-                // Logique pour afficher les numéros de page
-                <li class="page-item @(Model.HasNextPage ? "" : "disabled")"><a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)">Suivant</a></li>
-            </ul>
-        </nav>
     </div>
-    *@
-
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/listings-index.js"></script>
+}

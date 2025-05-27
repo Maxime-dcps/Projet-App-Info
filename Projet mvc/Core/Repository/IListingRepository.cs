@@ -1,5 +1,6 @@
 ﻿using Projet_mvc.Core.Domain;
 using Projet_mvc.Models;
+using Projet_mvc.Models.Listing;
 
 namespace Projet_mvc.Core.Repository
 {
@@ -12,5 +13,6 @@ namespace Projet_mvc.Core.Repository
         public Task<IEnumerable<Listing>> GetListingsByUserIdAsync(int userId);
         public Task<int> UpdateListingAsync(Listing listing);
         public Task<bool> DeleteListingAsync(int id);
+        public Task<List<ListingSummaryViewModel>> GetFilteredListingsAsync(ListingFilterViewModel filter);
     }
 }

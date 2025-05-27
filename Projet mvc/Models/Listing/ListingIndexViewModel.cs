@@ -6,7 +6,8 @@ namespace Projet_mvc.Models.Listing
     {
         public List<ListingSummaryViewModel> Listings { get; set; }
 
-        public List<TagViewModel> Tags { get; set; }
+        //public List<TagViewModel> Tags { get; set; }
+        public ListingFilterViewModel Filter { get; set; }
 
         public TagViewModel NewTag { get; set; }
     }

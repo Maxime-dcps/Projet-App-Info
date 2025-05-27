@@ -58,19 +58,23 @@ namespace Projet_mvc.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ListingFilterViewModel filter)
         {
-            var listings = await _listingRepository.GetAllListingsAsync();
-            var tags = await _tagRepository.GetAllTagsAsync();
+            string[] allowedSortOrder = { "date_desc", "date_asc", "price_desc", "price_asc", "popular" };
 
-            var model = new ListingIndexViewModel
+            if (!string.IsNullOrEmpty(filter.SortOrder) && !allowedSortOrder.Contains(filter.SortOrder)) filter.SortOrder = "date_desc";
+
+            filter.AvailableTags = await RePopulateAvailableTags(filter.SelectedTagIds);
+
+            var listings = ModelState.IsValid ? await _listingRepository.GetFilteredListingsAsync(filter) : await _listingRepository.GetAllListingsAsync();
+
+            var filteredModel = new ListingIndexViewModel
             {
                 Listings = listings,
-                Tags = tags.ToList(), 
-                NewTag = new TagViewModel()
+                Filter = filter
             };
 
-            return View(model);
+            return View(filteredModel);
         }
 
 
@@ -105,7 +109,7 @@ namespace Projet_mvc.Controllers
 
                 ModelState.AddModelError("", "Échec de l'envoi : Veuillez réessayer avec moins d'images ou des images plus petites.");
 
-                await RePopulateAvailableTags(errorViewModel);
+                model.AvailableTags = await RePopulateAvailableTags(model.SelectedTagIds);
                 return View(errorViewModel);
             }
 
@@ -115,7 +119,7 @@ namespace Projet_mvc.Controllers
 
             if (!ModelState.IsValid)
             {
-                await RePopulateAvailableTags(model);
+                model.AvailableTags = await RePopulateAvailableTags(model.SelectedTagIds);
                 return View(model);
             }
 
@@ -144,21 +148,17 @@ namespace Projet_mvc.Controllers
             return RedirectToAction("Profile", "Account");
         }
 
-        private async Task RePopulateAvailableTags(ListingFormViewModel model)
+        private async Task<List<SelectListItem>> RePopulateAvailableTags(List<int>? selectedTagIds = null)
         {
-            if (model.AvailableTags == null || !model.AvailableTags.Any())
+            var allTags = await _tagRepository.GetAllTagsAsync();
+            selectedTagIds ??= new List<int>(); // Assure que ce n'est pas null
+
+            return allTags.Select(tag => new SelectListItem
             {
-                var allTags = await _tagRepository.GetAllTagsAsync();
-
-                var selectedTagIds = model.SelectedTagIds ?? new List<int>();
-
-                model.AvailableTags = allTags.Select(tag => new SelectListItem
-                {
-                    Value = tag.Id.ToString(),
-                    Text = tag.Label,
-                    Selected = selectedTagIds.Contains(tag.Id)
-                }).ToList();
-            }
+                Value = tag.Id.ToString(),
+                Text = tag.Label,
+                Selected = selectedTagIds.Contains(tag.Id)
+            }).ToList();
         }
 
         public async Task<IActionResult> Edit(int id)
