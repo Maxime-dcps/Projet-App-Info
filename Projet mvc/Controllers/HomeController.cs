@@ -11,10 +11,12 @@ namespace Projet_mvc.Controllers
         private readonly ILogger<HomeController> _logger;
 
         private readonly IListingRepository _listingRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public HomeController(IListingRepository listingRepository, ILogger<HomeController> logger)
+        public HomeController(IListingRepository listingRepository, ITagRepository tagRepository, ILogger<HomeController> logger)
         {
             _listingRepository = listingRepository;
+            _tagRepository = tagRepository;
             _logger = logger;
         }
 
@@ -22,11 +24,13 @@ namespace Projet_mvc.Controllers
         {
             var recentListings = await _listingRepository.GetRecentListingsAsync(5);
             var popularListing = await  _listingRepository.GetPopularListingsAsync(5);
+            var popularTags = await _tagRepository.GetPopularTagsAsync(8);
 
             var viewModel = new HomePageViewModel
             {
                 RecentListings = recentListings,
-                PopularListings = popularListing
+                PopularListings = popularListing,
+                PopularTags = popularTags
             };
 
             return View(viewModel);

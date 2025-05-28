@@ -6,6 +6,6 @@
 
         public List<ListingSummaryViewModel> PopularListings { get; set; }
 
-        //Ajouter une liste des tags populaires
+        public List<TagViewModel> PopularTags { get; set; }
     }
 }

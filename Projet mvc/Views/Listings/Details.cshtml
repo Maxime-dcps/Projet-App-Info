@@ -94,8 +94,7 @@
                             <div>
                                 @foreach (var tag in Model.Tags)
                                 {
-                                    <a asp-controller="Listings" asp-action="Index" asp-route-tagId="@tag.Id"
-                                       class="badge bg-primary text-white text-decoration-none me-1 mb-1 py-2 px-3">
+                                    <a asp-controller="Listings" asp-action="Index" asp-route-SelectedTagIds="@tag.Id" class="btn btn-outline-primary btn-sm rounded-pill">
                                         #@tag.Label
                                     </a>
                                 }

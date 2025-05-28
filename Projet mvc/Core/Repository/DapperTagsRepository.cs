@@ -101,5 +101,25 @@ namespace Projet_mvc.Core.Repository
             
             AddTagsToListingAsync(listingId, selectedTagsIds).Wait();
         }
+
+        public async Task<List<TagViewModel>> GetPopularTagsAsync(int count)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+
+            const string sql = """
+                                SELECT 
+                                    t.tag_id AS Id,
+                                    t.label AS Label
+                                FROM tags t
+                                LEFT JOIN listing_tags l ON t.tag_id = l.tag_id
+                                GROUP BY t.tag_id, t.label
+                                ORDER BY COUNT(l.listing_id) DESC
+                                LIMIT @Count;
+                               """;
+
+            var result = await connection.QueryAsync<TagViewModel>(sql, new { Count = count });
+
+            return result.ToList();
+        }
     }
 }
