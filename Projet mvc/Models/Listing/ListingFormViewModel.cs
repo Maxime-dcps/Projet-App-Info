@@ -13,6 +13,13 @@ namespace Projet_mvc.Models.Listing
         public decimal Price { get; set; }
         public List<SelectListItem>? AvailableTags { get; set; }
         public List<int>? SelectedTagIds { get; set; }
+
         public List<IFormFile>? Images { get; set; }
+
+        // Only used for the edit form
+
+        public List<ImageViewModel> ExistingImages { get; set; } = new List<ImageViewModel>();
+
+        public List<int>? ToDeleteImageIds { get; set; } = new List<int>();
     }
 }

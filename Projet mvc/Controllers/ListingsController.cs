@@ -145,7 +145,7 @@ namespace Projet_mvc.Controllers
                 await SaveUploadedImagesAsync(model.Images, newListingId);
             }
 
-            return RedirectToAction("Profile", "Account");
+            return RedirectToAction("Details", "Listings", new { id = newListingId });
         }
 
         private async Task<List<SelectListItem>> RePopulateAvailableTags(List<int>? selectedTagIds = null)
@@ -175,12 +175,15 @@ namespace Projet_mvc.Controllers
 
             var selectedTags = await _tagRepository.GetTagsByIdAsync(id);
 
+            var existingImages = await _imageRepository.GetImagesByIdAsync(id);
+
             var model = new ListingFormViewModel
             {
                 Id = listing.Id,
                 Title = listing.Title,
                 Description = listing.Description,
                 Price = listing.Price,
+                ExistingImages = existingImages,
 
                 AvailableTags = allTags.Select(tag => new SelectListItem
                 {
@@ -194,29 +197,71 @@ namespace Projet_mvc.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Edit(ListingFormViewModel model)
-        {
+        { 
+            // Check the state of the model before proceeding
+
+            if (model == null)
+            {
+                ModelState.Clear();
+
+                var errorViewModel = new ListingFormViewModel();
+
+                ModelState.AddModelError("", "Échec de l'envoi : Veuillez réessayer avec moins d'images ou des images plus petites.");
+
+                errorViewModel.AvailableTags = await RePopulateAvailableTags();
+                errorViewModel.ExistingImages = await _imageRepository.GetImagesByIdAsync(model.Id);
+
+                return View(errorViewModel);
+            }
+
             var authorizationResult = await CheckListingAuthorizationAsync(model.Id);
+
             if (authorizationResult != null)
             {
                 return authorizationResult;
             }
 
-            var listing = await _listingRepository.GetListingByIdAsync(model.Id);
+            // Repopulate existing images
+
+            model.ExistingImages = await _imageRepository.GetImagesByIdAsync(model.Id);
+
+            var existingImagesCount = model.ExistingImages?.Count ?? 0;
+            var toDeleteCount = model.ToDeleteImageIds?.Count ?? 0;
+
+            ValidateUploadedImages(model.Images, existingImagesCount, toDeleteCount); // Validate the uploaded images
 
             if (!ModelState.IsValid)
+            {
+                model.AvailableTags = await RePopulateAvailableTags(model.SelectedTagIds);
                 return View(model);
+            }
+
+            var listing = await _listingRepository.GetListingByIdAsync(model.Id);
 
             listing.Title = model.Title;
             listing.Description = model.Description;
             listing.Price = model.Price;
 
-            await _listingRepository.UpdateListingAsync(listing);
+            // Handle image deletion
+
+            if (model.ToDeleteImageIds != null && model.ToDeleteImageIds.Any())
+            {
+                await DeleteImagesAsync(model.ToDeleteImageIds);
+            }
 
             if (model.SelectedTagIds != null && model.SelectedTagIds.Any())
             {
                 await _tagRepository.UpdateTagsToListingAsync(model.Id, model.SelectedTagIds);
             }
-            return RedirectToAction("Profile", "Account");
+
+            if (model.Images != null && model.Images.Any())
+            {
+                await SaveUploadedImagesAsync(model.Images, model.Id);
+            }
+
+            await _listingRepository.UpdateListingAsync(listing);
+
+            return RedirectToAction("Details", "Listings", new { id = model.Id });
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -232,14 +277,16 @@ namespace Projet_mvc.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private void ValidateUploadedImages(List<IFormFile>? images)
+        private void ValidateUploadedImages(List<IFormFile>? images, int existingImageCount = 0, int toDeleteCount = 0)
         {
             long maxFileSize = 5 * 1024 * 1024; // 5 MB
-            string[] allowedExtensions = { ".jpg", ".jpeg", ".png" , ".webp"};
+            string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
 
             if (images != null && images.Any())
             {
-                if (images.Count > 5)
+                int effectiveImageCount = images.Count + existingImageCount - toDeleteCount;
+
+                if (effectiveImageCount > 5)
                 {
                     ModelState.AddModelError("Images", "Vous ne pouvez pas télécharger plus de 5 images.");
                 }
@@ -270,7 +317,7 @@ namespace Projet_mvc.Controllers
         {
             var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "uploads"); // Absolute path to the uploads folder
 
-            int imageOrder = 0;
+            int imageOrder = await _imageRepository.GetLastImageOrderAsync(listingId);
 
             foreach (var file in images)
             {
@@ -296,6 +343,28 @@ namespace Projet_mvc.Controllers
                 };
 
                 await _imageRepository.AddImageAsync(imageEntity);
+            }
+        }
+
+        private async Task DeleteImagesAsync(List<int> imageIds)
+        {
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "uploads");
+
+            foreach (var imageId in imageIds)
+            {
+                var image = await _imageRepository.GetImageByImageIdAsync(imageId);
+
+                if(image != null)
+                {
+                    var fullPhysicalPath = Path.Combine(uploadsFolder, Path.GetFileName(image.FilePath));
+
+                    if (System.IO.File.Exists(fullPhysicalPath))
+                    {
+                        System.IO.File.Delete(fullPhysicalPath);
+                    }
+
+                    await _imageRepository.DeleteImageAsync(image.ImageId);
+                }
             }
         }
 

@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Projet_mvc.Models.Listing
 {
+    // TODO : Delete this class when the listing form is ready
+
     public class CreateListingViewModel
     {
         [Required, MaxLength(100, ErrorMessage = "Votre titre est trop long")]

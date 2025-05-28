@@ -1,11 +1,38 @@
 ﻿@model Projet_mvc.Models.Listing.ListingFormViewModel
 
-
 <h2>Modifier cette annonce</h2>
 
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
 
     <partial name="_ListingForm" model="Model" />
+
+    <div class="mb-3">
+        @if (Model.ExistingImages != null && Model.ExistingImages.Any())
+        {
+            <label class="form-label fw-bold">Images Actuelles (Cochez pour supprimer)</label>
+
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 image-checkbox-container">
+                @foreach (var image in Model.ExistingImages)
+                {
+                    <div class="col">
+                        <div class="image-checkbox-item text-center">
+                            <input type="checkbox" class="btn-check visually-hidden" name="ToDeleteImageIds" value="@image.ImageId" id="delete_img_@image.ImageId" autocomplete="off" />
+                            <label class="d-block position-relative" for="delete_img_@image.ImageId">
+                                <img src="@image.FilePath" alt="@image.AltText" class="img-thumbnail mb-1" style="max-height: 150px; cursor: pointer;" />
+                                <span class="delete-icon-overlay"><i class="fa-solid fa-trash"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Images"></label>
+        <input asp-for="Images" type="file" class="form-control" multiple />
+        <span asp-validation-for="Images" class="text-danger"></span>
+    </div>
 
     <div class="mt-4">
         <button type="submit" class="btn btn-success">Modifier l'annonce</button>
