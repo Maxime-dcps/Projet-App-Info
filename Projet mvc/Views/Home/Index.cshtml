@@ -9,22 +9,65 @@
 
     <div class="text-center mb-5 p-5 bg-white rounded shadow-sm border border-light-subtle hero-banner">
         <h1 class="display-4 fw-bold">Bienvenue sur RetroSwap !</h1>
-        <p class="lead text-secondary">Votre nouvelle destination pour acheter et vendre des trésors du jeu vidéo rétro entre passionnés.</p>
-        <p class="text-muted">Redécouvrez les consoles et les jeux qui ont marqué votre enfance. Prêt à chiner ?</p>
+        <p>Votre nouvelle destination pour acheter et vendre des trésors du jeu vidéo rétro entre passionnés.</p>
+        <p>Redécouvrez les consoles et les jeux qui ont marqué votre enfance. Prêt à chiner ?</p>
         <hr class="my-4 w-50 mx-auto">
     </div>
 
-    
+
+ <div class="container py-5">
+
+    <!-- Dernières annonces -->
+    <section class="mb-5">
+        <h2 class="text-center mb-1 text-dark fw-bold">Les Dernières Pépites</h2>
+        <p class="text-center mb-4 text-muted fst-italic">Soyez les premiers à découvrir les annonces fraîchement ajoutées !</p>
+
+        @if (Model.RecentListings != null && Model.RecentListings.Any())
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+                @foreach (var listing in Model.RecentListings)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-0 listing-card">
+                            <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
+                                <img src="@listing.PrimaryImageUrl" class="card-img-top rounded-top listing-card-img" alt="@listing.PrimaryImageAlt" 
+                                     style="height: 200px; object-fit: cover;">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title mb-2">
+                                    <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" 
+                                       class="text-decoration-none text-dark stretched-link truncate-text-2-lines">@listing.Title</a>
+                                </h5>
+                                <div class="mt-auto pt-2 d-flex justify-content-between align-items-center">
+                                    <span class="card-text fs-4 fw-bold text-primary">@listing.Price.ToString("C")</span>
+                                    <div class="favorite-button-wrapper position-relative" style="z-index: 10;">
+                                        @await Html.PartialAsync("_FavoriteButton", listing)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-light text-center py-4 rounded-lg shadow-sm" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i> Aucune annonce à afficher dans cette section pour le moment.
+            </div>
+        }
+    </section>
 
     <!-- Tags populaires -->
     @if (Model.PopularTags != null && Model.PopularTags.Any())
     {
         <section class="mb-5 py-4 bg-light rounded shadow-sm">
-            <h2 class="text-center mb-3 text-secondary">Tags populaires</h2>
+            <h2 class="text-center mb-1 text-secondary fw-bold">Explorez par Catégorie</h2>
+            <p class="text-center mb-4 text-muted fst-italic">Découvrez nos annonces classées par les mots-clés les plus recherchés.</p>
             <div class="d-flex flex-wrap justify-content-center gap-2 px-3">
                 @foreach (var tag in Model.PopularTags)
                 {
-                    <a asp-controller="Listings" asp-action="Index" asp-route-SelectedTagIds="@tag.Id" class="btn btn-outline-primary btn-sm rounded-pill">
+                    <a asp-controller="Listings" asp-action="Index" asp-route-SelectedTagIds="@tag.Id" class="btn btn-outline-primary btn-sm rounded-pill text-decoration-none">
                         #@tag.Label
                     </a>
                 }
@@ -32,81 +75,34 @@
         </section>
     }
 
-    <!-- Dernières annonces -->
-    <section class="mb-5">
-        <h2 class="text-center mb-4 text-dark">Fraîchement arrivés !</h2>
-
-        @if (Model.RecentListings != null && Model.RecentListings.Any())
-        {
-            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
-                @foreach (var listing in Model.RecentListings)
-                {
-                    <div class="col">
-                        <div class="card h-100 shadow-sm border-0 position-relative">
-                        <div class="card h-100 shadow-sm border-0">
-                            <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
-                                <img src="@listing.PrimaryImageUrl" class="card-img-top rounded-top" alt="@listing.PrimaryImageAlt" 
-                                     style="height: 200px; object-fit: cover; transition: transform .3s;">
-                            </a>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">
-                                    <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" 
-                                       class="text-decoration-none text-dark stretched-link">@listing.Title</a>
-                                </h5>
-                                <div class="mt-auto pt-2 d-flex justify-content-between align-items-center">
-                                    <span class="card-text fs-4 fw-bold text-primary">@listing.Price.ToString("C")</span>
-                                    <div class="favorite-button-wrapper position-relative" style="z-index: 10;">
-                                        @await Html.PartialAsync("_FavoriteButton", listing)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-        else
-        {
-            <div class="alert alert-info text-center" role="alert">
-                Aucune annonce à afficher dans cette section.
-            </div>
-        }
-    </section>
-
     <!-- Annonces populaires -->
     <section class="mb-5">
-        <h2 class="text-center mb-4 text-dark">Annonces populaires</h2>
+        <h2 class="text-center mb-1 text-dark fw-bold">Nos Coups de Cœur du Moment</h2>
+        <p class="text-center mb-4 text-muted fst-italic">Découvrez les annonces qui captivent le plus notre communauté.</p>
 
         @if (Model.PopularListings != null && Model.PopularListings.Any())
         {
-            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
                 @foreach (var listing in Model.PopularListings)
                 {
                     <div class="col">
-
-                        <div class="card h-100 shadow-sm border-0 position-relative">
-
-                        <div class="card h-100 shadow-sm border-0">
+                        <div class="card h-100 shadow-sm border-0 listing-card">
                             <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
-                                <img src="@listing.PrimaryImageUrl" class="card-img-top rounded-top" alt="@listing.PrimaryImageAlt" 
+                                <img src="@listing.PrimaryImageUrl" class="card-img-top rounded-top listing-card-img" alt="@listing.PrimaryImageAlt" 
                                      style="height: 200px; object-fit: cover;">
                             </a>
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">
+                                <h5 class="card-title mb-2">
                                     <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" 
-                                       class="text-decoration-none text-dark stretched-link">@listing.Title</a>
+                                       class="text-decoration-none text-dark stretched-link truncate-text-2-lines">@listing.Title</a>
                                 </h5>
-
                                 <div class="mt-auto pt-2 d-flex justify-content-between align-items-center">
                                     <span class="card-text fs-4 fw-bold text-primary">@listing.Price.ToString("C")</span>
                                     <div class="favorite-button-wrapper position-relative" style="z-index: 10;">
                                         @await Html.PartialAsync("_FavoriteButton", listing)
                                     </div>
                                 </div>
-
                             </div>
-                        </div>
                         </div>
                     </div>
                 }
@@ -114,14 +110,48 @@
         }
         else
         {
-            <div class="alert alert-info text-center" role="alert">
-                Aucune annonce à afficher dans cette section.
+            <div class="alert alert-light text-center py-4 rounded-lg shadow-sm" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i> Aucune annonce à afficher dans cette section pour le moment.
             </div>
         }
-    </section>
+        </section>
 
 </div>
 
 @section Scripts {
     <script src="~/js/listings-index.js"></script>
 }
+
+<style>
+
+    h2 {
+        font-size: 2.2rem;
+    }
+    .fst-italic {
+        font-style: italic;
+    }
+
+    .listing-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    .listing-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .truncate-text-2-lines {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 3rem;
+    }
+
+    .btn-outline-primary.rounded-pill:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    }
+</style>

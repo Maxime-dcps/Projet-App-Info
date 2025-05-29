@@ -28,67 +28,70 @@
                     <img src="~/images/Logo.png" alt="Logo" style="height: 80px" />
                     <span class="ms-2">RetroSwap</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 align-items-center me-auto">
 
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav flex-grow-1 align-items-center me-auto">
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Listings" asp-action="Index">Explorer</a>
                         </li>
-                        
+
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Listings" asp-action="Create">
-                                    Vendre
-                                </a>
+                                <a class="nav-link" asp-controller="Listings" asp-action="Create">Vendre</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Listings/Create">
-                                    Vendre
-
-                                </a>
+                                <a class="nav-link" asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Listings/Create">Vendre</a>
                             </li>
                         }
                     </ul>
 
-                    <form class="d-flex ms-auto me-3 my-2 my-lg-0" method="get" asp-controller="Listings" asp-action="Index">
+                    <form class="d-none d-sm-flex ms-auto me-3 my-2 my-lg-0" method="get" asp-controller="Listings" asp-action="Index">
                         <div class="input-group">
                             <input class="form-control" type="search" placeholder="Rechercher" aria-label="Rechercher" name="SearchTerm">
                             <button class="btn btn-primary input-group-text" type="submit">
-                                <i class="fas fa-search"></i>
+                                <span class="d-none d-sm-inline"><i class="fas fa-search"></i></span>
+                                <span class="d-inline d-sm-none">Rechercher</span>
                             </button>
                         </div>
                     </form>
 
                     <ul class="navbar-nav align-items-center">
-
                         @if (User.Identity.IsAuthenticated)
-                        {                          
-
-                            <li class=" nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Profile">
-                                    <img src="~/images/user_placeholder.png" alt="Logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="@User.Identity.Name" />
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Profile" title="@User.Identity.Name">
+                                    <span class="d-none d-sm-inline">
+                                        <img src="~/images/user_placeholder.png" alt="Profil"/>
+                                    </span>
+                                    <span class="d-inline d-sm-none">Mon profil</span>
                                 </a>
                             </li>
-                            
+
                             <li class="nav-item">
                                 <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
-                                    <button type="submit" class="nav-link btn btn-link-profile"><i class="fas fa-sign-out-alt fa-2x"></i></button>
+                                    <button type="submit" class="nav-link btn btn-link-profile">
+                                        <span class="d-none d-sm-inline"><i class="fas fa-sign-out-alt fa-2x"></i></span>
+                                        <span class="d-inline d-sm-none">Se déconnecter</span>
+                                    </button>
                                 </form>
                             </li>
                         }
                         else
-                        {                           
+                        {
                             <li class="nav-item">
-                                <a class="nav-item" asp-controller="Account" asp-action="Login">
-                                    <img src="~/images/user_placeholder.png" alt="Logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Connectez-vous" />
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">
+                                    <span class="d-none d-sm-inline">
+                                        <img src="~/images/user_placeholder.png" alt="Connexion" style="height: 30px;" />
+                                    </span>
+                                    <span class="d-inline d-sm-none">Se connecter</span>
                                 </a>
                             </li>
                         }
@@ -96,6 +99,7 @@
                 </div>
             </div>
         </nav>
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">

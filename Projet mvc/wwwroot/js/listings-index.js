@@ -5,7 +5,7 @@
             this.form.submit();
         });
     }
-<<<<<<< HEAD
+
 });
 
 // Empêche que le clic remonte et déclenche le lien 'stretched-link'
@@ -15,6 +15,4 @@ document.addEventListener('DOMContentLoaded', function () {
             e.stopPropagation();   
         });
     });
-=======
->>>>>>> 6ee7f94ca1c0bda8cd9255815e500fa4d2f2cba0
 });
