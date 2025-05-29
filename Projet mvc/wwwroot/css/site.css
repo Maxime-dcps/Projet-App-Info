@@ -108,9 +108,14 @@ body {
     margin-bottom: 2rem;
     text-align: center;
     padding: 2rem;
-    background: linear-gradient(135deg, #0d6efd 0%, #1b8dfb 40%, #a0d8ff 100%);
+    background-image: url('/images/fond.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
+
 
     .page-hero-section .container-fluid {
         position: relative;
@@ -129,25 +134,6 @@ body {
     }
 
 /* Cards */
-.card.listing-card, 
-.card.filter-card, 
-.page-hero-section .container-fluid {
-    position: relative;
-    z-index: 2;
-}
-
-.page-hero-section h1,
-.page-hero-section h2 {
-    color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.page-hero-section p {
-    color: #f0f8ff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-/* Cards */
 .card.listing-card,
 .card.filter-card,
 .card.admin-tag-card {
@@ -156,6 +142,7 @@ body {
     border-radius: var(--bs-border-radius-lg);
 }
 
+/*Favorite toggle*/
 .favorite-form {
     pointer-events: auto;
     position: relative;
@@ -246,46 +233,6 @@ body {
     font-size: 1rem;
 }
 
-
-    .form-custom-base .form-card {
-        background-color: #f9fafb;
-        padding: 2rem;
-        border-radius: 1rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border: 1px solid #ddd;
-    }
-
-    .form-custom-base .form-container {
-        min-height: 100vh;
-        padding: 1rem 0 2rem;
-    }
-
-    .form-custom-base h2 {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: inherit;
-        margin-bottom: 2.5rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 3px solid #0d6efd;
-        max-width: fit-content;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .form-custom-base .form-floating {
-        position: relative;
-        margin-bottom: 1.5rem;
-    }
-
-        .form-custom-base .form-floating input {
-            width: 100%;
-            padding: 1rem 0.75rem 0.25rem;
-            height: calc(3.5rem + 2px);
-            border-radius: 0.5rem;
-            border: 1px solid #ced4da;
-            background-color: #fff;
-        }
-
 .form-custom-base .form-card {
     background-color: #f9fafb;
     padding: 2rem;
@@ -295,8 +242,8 @@ body {
 }
 
 .form-custom-base .form-container {
-    min-height: 100vh;
-    padding: 1rem 0 2rem;
+    min-height: 10vh;
+    padding: 0.5rem 0 1rem;
 }
 
 .form-custom-base h2 {
@@ -400,3 +347,38 @@ body {
     background-color: white;
     border: 1px solid #dee2e6;
 }
+
+.section-spacing {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/*Frontpage banner*/
+.hero-banner {
+    background-image: url('/images/fond.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    position: relative;
+}
+
+.hero-banner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    z-index: 1;
+
+}
+
+.hero-banner > * {
+    position: relative;
+    z-index: 2;
+
+}
+
+
