@@ -153,12 +153,15 @@ namespace Projet_mvc.Controllers
             var allTags = await _tagRepository.GetAllTagsAsync();
             selectedTagIds ??= new List<int>(); // Assure que ce n'est pas null
 
-            return allTags.Select(tag => new SelectListItem
-            {
-                Value = tag.Id.ToString(),
-                Text = tag.Label,
-                Selected = selectedTagIds.Contains(tag.Id)
-            }).ToList();
+            return allTags
+                .OrderByDescending(tag => selectedTagIds.Contains(tag.Id))
+                .Select(tag => new SelectListItem
+                {
+                    Value = tag.Id.ToString(),
+                    Text = tag.Label,
+                    Selected = selectedTagIds.Contains(tag.Id)
+                })
+                .ToList();
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -185,7 +188,9 @@ namespace Projet_mvc.Controllers
                 Price = listing.Price,
                 ExistingImages = existingImages,
 
-                AvailableTags = allTags.Select(tag => new SelectListItem
+                AvailableTags = allTags
+                .OrderByDescending(tag => selectedTags.Any(t => t.Id == tag.Id)) // sort selected tags first
+                .Select(tag => new SelectListItem
                 {
                     Value = tag.Id.ToString(),
                     Text = tag.Label,

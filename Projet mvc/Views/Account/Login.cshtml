@@ -1,36 +1,33 @@
 ﻿@using Projet_mvc.Models.User
-
 @model LoginViewModel
 
-<div class="row justify-content-center align-items-center" style="min-height: 40vh;">
-    <div class="col-md-6 login-card">
-        <h2 class="text-center mb-4">Connexion</h2>
+<div class="row justify-content-center align-items-center form-container form-custom-base">
+    <div class="col-md-6 form-card">
+        <h2 class="text-center">Connectez-vous</h2>
 
         <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Username" class="form-label"></label>
-                <input asp-for="Username" class="form-control" autofocus />
+            <div class="form-floating">
+                <input asp-for="Username" class="form-control" placeholder="Nom d'utilisateur" autocomplete="username" autofocus />
+                <label for="Username">Nom d'utilisateur</label>
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" type="password" class="form-control" />
+            <div class="form-floating">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Mot de passe" autocomplete="current-password" />
+                <label for="Password">Mot de passe</label>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <div class="form-group mb-3 d-grid">
-                <button type="submit" class="btn btn-primary">Se connecter</button>
+            <div class="submit-btn-container">
+                <button type="submit" class="form-submit-btn">Se connecter</button>
+            </div>
+
+            <div class="register-text">
+                <span>Pas encore de compte ?</span>
+                <a asp-area="" asp-controller="Account" asp-action="Register" class="custom-link-register">Créer un compte</a>
             </div>
         </form>
     </div>
 </div>
-
-<div class="text-center mt-3">
-    <span class="text-dark">Vous n'avez pas de compte ? Créer en un 
-        <a class="custom-link-register" asp-area="" asp-controller="Account" asp-action="Register">Ici</a>
-    </span>
-</div>
-   

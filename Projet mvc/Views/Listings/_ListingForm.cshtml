@@ -2,38 +2,40 @@
 
 <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-<div class="form-group">
-    <label asp-for="Title"></label>
-    <input asp-for="Title" class="form-control" />
+<div class="form-floating mb-3">
+    <input asp-for="Title" class="form-control" placeholder="Titre" />
+    <label asp-for="Title">Titre</label>
     <span asp-validation-for="Title" class="text-danger"></span>
 </div>
 
-<div class="form-group">
+<div class="form-floating mb-3">
+    <textarea asp-for="Description" class="form-control" placeholder="Description"></textarea>
     <label asp-for="Description"></label>
-    <textarea asp-for="Description" class="form-control"></textarea>
     <span asp-validation-for="Description" class="text-danger"></span>
 </div>
 
-<div class="form-group">
-    <label asp-for="Price"></label>
-    <input asp-for="Price" class="form-control" type="number" step="0.01" />
+<div class="form-floating mb-3">
+    <input asp-for="Price" class="form-control" type="number" step="0.01" placeholder="Prix (en €)" />
+    <label asp-for="Price">Prix (en €)</label>
     <span asp-validation-for="Price" class="text-danger"></span>
 </div>
 
-<div class="container">
-    <label asp-for="SelectedTagIds" class="form-label">Ajouter des tags</label>
+<div class="mb-3">
     @if (Model.AvailableTags != null && Model.AvailableTags.Any())
     {
-        <div class="d-flex flex-wrap gap-2 justify-content-around">
-            @foreach (var tag in Model.AvailableTags)
-            {
-                <div>
-                    <div class="form-check">
-                        <input type="checkbox" class="btn-check" autocomplete="off" value="@tag.Value" id="tag_@tag.Value" name="SelectedTagIds" checked="@tag.Selected">
-                        <label class="btn btn-outline-primary" for="tag_@tag.Value">@tag.Text</label>
+        <label asp-for="SelectedTagIds" class="form-label fw-semibold text-muted h6 mb-3 mt-2">Choisissez un ou plusieurs tags</label>
+        <div class="tags-scroll-area p-3 rounded shadow-sm" id="tags-form-area">
+            <div class="d-flex flex-wrap gap-2 justify-content-start">
+                @foreach (var tag in Model.AvailableTags)
+                {
+                    <div>
+                        <div class="form-check">
+                            <input type="checkbox" class="btn-check" autocomplete="off" value="@tag.Value" id="tag_@tag.Value" name="SelectedTagIds" checked="@tag.Selected" />
+                            <label class="btn btn-outline-primary rounded-pill" for="tag_@tag.Value">#@tag.Text</label>
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     }
 </div>

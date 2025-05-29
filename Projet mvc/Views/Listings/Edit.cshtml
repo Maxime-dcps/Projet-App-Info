@@ -1,44 +1,50 @@
 ﻿@model Projet_mvc.Models.Listing.ListingFormViewModel
 
-<h2>Modifier cette annonce</h2>
+<div class="row justify-content-center align-items-center form-container form-custom-base">
+    <div class="col-md-6 form-card">
+        <h2 class="text-center">Modifier cette annonce</h2>
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="form-custom-base">
 
-    <partial name="_ListingForm" model="Model" />
+            <partial name="_ListingForm" model="Model" />
 
-    <div class="mb-3">
-        @if (Model.ExistingImages != null && Model.ExistingImages.Any())
-        {
-            <label class="form-label fw-bold">Images Actuelles (Cochez pour supprimer)</label>
+            @if (Model.ExistingImages != null && Model.ExistingImages.Any())
+            {
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-muted h6 mb-3 mt-2">Images actuelles (cochez pour supprimer)</label>
 
-            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 image-checkbox-container">
-                @foreach (var image in Model.ExistingImages)
-                {
-                    <div class="col">
-                        <div class="image-checkbox-item text-center">
-                            <input type="checkbox" class="btn-check visually-hidden" name="ToDeleteImageIds" value="@image.ImageId" id="delete_img_@image.ImageId" autocomplete="off" />
-                            <label class="d-block position-relative" for="delete_img_@image.ImageId">
-                                <img src="@image.FilePath" alt="@image.AltText" class="img-thumbnail mb-1" style="max-height: 150px; cursor: pointer;" />
-                                <span class="delete-icon-overlay"><i class="fa-solid fa-trash"></i></span>
-                            </label>
-                        </div>
+                    <div class="image-checkbox-container">
+                        @foreach (var image in Model.ExistingImages)
+                        {
+                            <div class="image-checkbox-item">
+                                <input type="checkbox" class="btn-check visually-hidden" name="ToDeleteImageIds" value="@image.ImageId" id="delete_img_@image.ImageId" autocomplete="off" />
+                                <label for="delete_img_@image.ImageId">
+                                    <img src="@image.FilePath" alt="@image.AltText" />
+                                    <span class="delete-icon-overlay">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </span>
+                                </label>
+                            </div>
+                        }
                     </div>
-                }
+                </div>
+            }
+
+            <div class="form-group">
+                <label asp-for="Images" class="form-label fw-semibold text-muted h6 mb-3 mt-2">Ajouter de nouvelles images</label>
+                <input asp-for="Images" type="file" class="form-control" multiple />
+                <span asp-validation-for="Images" class="text-danger"></span>
             </div>
-        }
-    </div>
 
-    <div class="form-group">
-        <label asp-for="Images"></label>
-        <input asp-for="Images" type="file" class="form-control" multiple />
-        <span asp-validation-for="Images" class="text-danger"></span>
-    </div>
 
-    <div class="mt-4">
-        <button type="submit" class="btn btn-success">Modifier l'annonce</button>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Annuler</a>
+            <div class="mt-5 d-flex justify-content-between gap-3">
+                <a asp-controller="Home" asp-action="Index" class="form-cancel-btn">Annuler</a>
+                <button type="submit" class="form-submit-btn">Modifier l'annonce</button>
+            </div>
+        </form>
     </div>
-</form>
+</div>
+
 
 @section Scripts {
     @{
