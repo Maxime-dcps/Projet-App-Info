@@ -73,10 +73,7 @@ namespace Projet_mvc.Core.Repository
                                 SELECT 
                                     l.listing_id AS ListingId,
                                     l.title AS Title,
-<<<<<<< HEAD
                                     l.user_id AS UserId,
-=======
->>>>>>> 6ee7f94ca1c0bda8cd9255815e500fa4d2f2cba0
                                     l.price AS Price,
                                     img.file_path AS PrimaryImageUrl,
                                     img.alt_text AS PrimaryImageAlt
@@ -233,10 +230,7 @@ namespace Projet_mvc.Core.Repository
                         SELECT 
                             l.listing_id AS ListingId,
                             l.title AS Title,
-<<<<<<< HEAD
                             l.user_id AS UserId,
-=======
->>>>>>> 6ee7f94ca1c0bda8cd9255815e500fa4d2f2cba0
                             l.price AS Price,
                             img.file_path AS PrimaryImageUrl,
                             img.alt_text AS PrimaryImageAlt

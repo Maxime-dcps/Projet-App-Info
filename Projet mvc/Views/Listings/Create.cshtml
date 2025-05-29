@@ -4,22 +4,11 @@
     <div class="col-md-6 form-card">
         <h2 class="text-center">Créer une annonce</h2>
 
-<<<<<<< HEAD
+
 <div class="row justify-content-center align-items-center form-container form-custom-base">
     <div class="col-md-6 form-card">
         <h2 class="text-center">Créer une annonce</h2>
 
-         <form asp-action="Create" method="post" enctype="multipart/form-data" class="form-custom-base">
-
-            <partial name="_ListingForm" model="Model" />
-
-            <div class="form-group">
-                <label asp-for="Images" class="form-label fw-semibold text-muted h6 mb-3 mt-2"></label>
-                <input asp-for="Images" type="file" class="form-control" multiple />
-                <span asp-validation-for="Images" class="text-danger"></span>
-            </div>
-
-=======
         <form asp-action="Create" method="post" enctype="multipart/form-data" class="form-custom-base">
 
             <partial name="_ListingForm" model="Model" />
@@ -30,15 +19,10 @@
                 <span asp-validation-for="Images" class="text-danger"></span>
             </div>
 
->>>>>>> 6ee7f94ca1c0bda8cd9255815e500fa4d2f2cba0
             <div class="mt-5 d-flex justify-content-between gap-3">
                 <a asp-controller="Home" asp-action="Index" class="form-cancel-btn">Annuler</a>
                 <button type="submit" class="form-submit-btn">Créer l'annonce</button>
             </div>
         </form>
     </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 6ee7f94ca1c0bda8cd9255815e500fa4d2f2cba0
 </div>

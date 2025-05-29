@@ -68,7 +68,6 @@ namespace Projet_mvc.Controllers
 
             var listings = ModelState.IsValid ? await _listingRepository.GetFilteredListingsAsync(filter) : await _listingRepository.GetAllListingsAsync();
 
-<<<<<<< HEAD
             var username = User.Identity?.Name;
             var user = string.IsNullOrEmpty(username) ? null : await _userRepository.GetByUsernameAsync(username);
 
@@ -80,8 +79,6 @@ namespace Projet_mvc.Controllers
                 }
             }
 
-=======
->>>>>>> 6ee7f94ca1c0bda8cd9255815e500fa4d2f2cba0
             var filteredModel = new ListingIndexViewModel
             {
                 Listings = listings,
