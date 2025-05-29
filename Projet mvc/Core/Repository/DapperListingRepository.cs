@@ -24,6 +24,7 @@ namespace Projet_mvc.Core.Repository
                                 SELECT 
                                     l.listing_id AS ListingId,
                                     l.title AS Title,
+                                    l.user_id AS UserId,
                                     l.price AS Price,
                                     img.file_path AS PrimaryImageUrl,
                                     img.alt_text AS PrimaryImageAlt
@@ -72,6 +73,7 @@ namespace Projet_mvc.Core.Repository
                                 SELECT 
                                     l.listing_id AS ListingId,
                                     l.title AS Title,
+                                    l.user_id AS UserId,
                                     l.price AS Price,
                                     img.file_path AS PrimaryImageUrl,
                                     img.alt_text AS PrimaryImageAlt
@@ -104,6 +106,7 @@ namespace Projet_mvc.Core.Repository
                                 SELECT 
                                     l.listing_id AS ListingId,
                                     l.title AS Title,
+                                    l.user_id AS UserId,
                                     l.price AS Price,
                                     img.file_path AS PrimaryImageUrl,
                                     img.alt_text AS PrimaryImageAlt
@@ -227,6 +230,7 @@ namespace Projet_mvc.Core.Repository
                         SELECT 
                             l.listing_id AS ListingId,
                             l.title AS Title,
+                            l.user_id AS UserId,
                             l.price AS Price,
                             img.file_path AS PrimaryImageUrl,
                             img.alt_text AS PrimaryImageAlt

@@ -26,8 +26,7 @@
         <label asp-for="SelectedTagIds" class="form-label fw-semibold text-muted h6 mb-3 mt-2">Choisissez un ou plusieurs tags</label>
         <div class="tags-scroll-area p-3 rounded shadow-sm" id="tags-form-area">
             <div class="d-flex flex-wrap gap-2 justify-content-start">
-                @foreach (var tag in Model.AvailableTags)
-                {
+                @foreach (var tag in Model.AvailableTags){
                     <div>
                         <div class="form-check">
                             <input type="checkbox" class="btn-check" autocomplete="off" value="@tag.Value" id="tag_@tag.Value" name="SelectedTagIds" checked="@tag.Selected" />

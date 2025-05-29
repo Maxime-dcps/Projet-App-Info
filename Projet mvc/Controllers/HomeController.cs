@@ -12,12 +12,15 @@ namespace Projet_mvc.Controllers
 
         private readonly IListingRepository _listingRepository;
         private readonly ITagRepository _tagRepository;
+        private readonly IFavoriteRepository _favoriteRepository;
 
-        public HomeController(IListingRepository listingRepository, ITagRepository tagRepository, ILogger<HomeController> logger)
+        public HomeController(IListingRepository listingRepository, ITagRepository tagRepository, ILogger<HomeController> logger, IFavoriteRepository favoriteRepository)
         {
             _listingRepository = listingRepository;
             _tagRepository = tagRepository;
             _logger = logger;
+            _favoriteRepository = favoriteRepository;
+
         }
 
         public async Task<IActionResult> Index()
@@ -26,6 +29,31 @@ namespace Projet_mvc.Controllers
             var popularListing = await  _listingRepository.GetPopularListingsAsync(5);
             var popularTags = await _tagRepository.GetPopularTagsAsync(8);
 
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            int? currentUserId = null;
+
+            if (userIdClaim != null && int.TryParse(userIdClaim, out int parsedUserId))
+            {
+                currentUserId = parsedUserId;
+            }
+
+            List<int> userFavorites = new();
+
+            if (currentUserId.HasValue)
+            {
+                var favListings = await _favoriteRepository.GetFavoritesForUserAsync(currentUserId.Value);
+                userFavorites = favListings.Select(f => f.Id).ToList();
+            }
+
+            foreach (var listing in recentListings)
+            {
+                listing.IsFavorited = userFavorites.Contains(listing.ListingId);
+            }
+
+            foreach (var listing in popularListing)
+            {
+                listing.IsFavorited = userFavorites.Contains(listing.ListingId);
+            }
             var viewModel = new HomePageViewModel
             {
                 RecentListings = recentListings,

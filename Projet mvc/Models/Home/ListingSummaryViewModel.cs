@@ -1,4 +1,5 @@
-﻿using Projet_mvc.Core.Domain;
+﻿using Microsoft.AspNetCore.SignalR;
+using Projet_mvc.Core.Domain;
 
 namespace Projet_mvc.Models
 {
@@ -9,5 +10,7 @@ namespace Projet_mvc.Models
         public decimal Price { get; set; }
         public string PrimaryImageUrl { get; set; }
         public string PrimaryImageAlt { get; set; }
-    }
+        public bool IsFavorited { get; set; }
+        public int UserId { get; set; }
+}
 }

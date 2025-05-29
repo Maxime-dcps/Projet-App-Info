@@ -68,6 +68,17 @@ namespace Projet_mvc.Controllers
 
             var listings = ModelState.IsValid ? await _listingRepository.GetFilteredListingsAsync(filter) : await _listingRepository.GetAllListingsAsync();
 
+            var username = User.Identity?.Name;
+            var user = string.IsNullOrEmpty(username) ? null : await _userRepository.GetByUsernameAsync(username);
+
+            if (user != null)
+            {
+                foreach (var listing in listings)
+                {
+                    listing.IsFavorited = await _favoriteRepository.ExistsAsync(user.User_Id, listing.ListingId);
+                }
+            }
+
             var filteredModel = new ListingIndexViewModel
             {
                 Listings = listings,

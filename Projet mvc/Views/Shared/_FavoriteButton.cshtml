@@ -1,0 +1,27 @@
+﻿@using Projet_mvc.Models.Home
+@using System.Security.Claims
+
+@model ListingSummaryViewModel
+
+@{
+    var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "-1");
+}
+
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    if (Model.UserId != currentUserId)
+    {
+        <form asp-controller="Favorite" asp-action="Toggle" method="post" class="favorite-form d-inline" onclick="event.stopPropagation();">
+            <input type="hidden" name="listingId" value="@Model.ListingId" />
+            <button type="submit" class="btn btn-link p-0 border-0" title="Ajouter aux favoris" style="position: relative; z-index: 110;">
+                <i class="bi @(Model.IsFavorited ? "bi-heart-fill text-danger" : "bi-heart text-muted") fs-5"></i>
+            </button>
+        </form>
+    }
+}
+else
+{
+    <a href="@Url.Action("Login", "Account")" class="text-muted" title="Connectez-vous pour ajouter aux favoris">
+        <i class="bi bi-heart fs-5"></i>
+    </a>
+}

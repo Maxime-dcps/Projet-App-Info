@@ -7,12 +7,14 @@
 
 <div class="container mt-4">
 
-    <div class="text-center mb-5 p-5 bg-white rounded shadow-sm border border-light-subtle">
+    <div class="text-center mb-5 p-5 bg-white rounded shadow-sm border border-light-subtle hero-banner">
         <h1 class="display-4 fw-bold">Bienvenue sur RetroSwap !</h1>
         <p class="lead text-secondary">Votre nouvelle destination pour acheter et vendre des trésors du jeu vidéo rétro entre passionnés.</p>
         <p class="text-muted">Redécouvrez les consoles et les jeux qui ont marqué votre enfance. Prêt à chiner ?</p>
         <hr class="my-4 w-50 mx-auto">
     </div>
+
+    
 
     <!-- Tags populaires -->
     @if (Model.PopularTags != null && Model.PopularTags.Any())
@@ -40,6 +42,7 @@
                 @foreach (var listing in Model.RecentListings)
                 {
                     <div class="col">
+                        <div class="card h-100 shadow-sm border-0 position-relative">
                         <div class="card h-100 shadow-sm border-0">
                             <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
                                 <img src="@listing.PrimaryImageUrl" class="card-img-top rounded-top" alt="@listing.PrimaryImageAlt" 
@@ -50,8 +53,14 @@
                                     <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" 
                                        class="text-decoration-none text-dark stretched-link">@listing.Title</a>
                                 </h5>
-                                <p class="card-text mt-auto mb-0 fs-5 fw-bold text-primary">@listing.Price.ToString("C")</p>
+                                <div class="mt-auto pt-2 d-flex justify-content-between align-items-center">
+                                    <span class="card-text fs-4 fw-bold text-primary">@listing.Price.ToString("C")</span>
+                                    <div class="favorite-button-wrapper position-relative" style="z-index: 10;">
+                                        @await Html.PartialAsync("_FavoriteButton", listing)
+                                    </div>
+                                </div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 }
@@ -75,6 +84,9 @@
                 @foreach (var listing in Model.PopularListings)
                 {
                     <div class="col">
+
+                        <div class="card h-100 shadow-sm border-0 position-relative">
+
                         <div class="card h-100 shadow-sm border-0">
                             <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" class="text-decoration-none">
                                 <img src="@listing.PrimaryImageUrl" class="card-img-top rounded-top" alt="@listing.PrimaryImageAlt" 
@@ -85,8 +97,16 @@
                                     <a asp-controller="Listings" asp-action="Details" asp-route-id="@listing.ListingId" 
                                        class="text-decoration-none text-dark stretched-link">@listing.Title</a>
                                 </h5>
-                                <p class="card-text mt-auto mb-0 fs-5 fw-bold text-primary">@listing.Price.ToString("C")</p>
+
+                                <div class="mt-auto pt-2 d-flex justify-content-between align-items-center">
+                                    <span class="card-text fs-4 fw-bold text-primary">@listing.Price.ToString("C")</span>
+                                    <div class="favorite-button-wrapper position-relative" style="z-index: 10;">
+                                        @await Html.PartialAsync("_FavoriteButton", listing)
+                                    </div>
+                                </div>
+
                             </div>
+                        </div>
                         </div>
                     </div>
                 }
@@ -101,3 +121,7 @@
     </section>
 
 </div>
+
+@section Scripts {
+    <script src="~/js/listings-index.js"></script>
+}
