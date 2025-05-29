@@ -21,7 +21,7 @@
                 <a asp-action="Edit" class="btn btn-primary">Modifier mes informations</a>
 
                 <!-- Bouton pour ouvrir le modal -->
-                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteAccountModal">Supprimer mon compte</button>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">Supprimer mon compte</button>
             </div>
 	    </div>
     </div>
@@ -32,7 +32,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteAccountModalLabel">Confirmation de suppression</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -40,7 +40,7 @@
                     <p>Êtes-vous sûr de vouloir supprimer définitivement votre compte ? Cette action est irréversible.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <form asp-action="DeleteAccount" method="post">
                         <button type="submit" class="btn btn-danger">Supprimer mon compte</button>
                     </form>

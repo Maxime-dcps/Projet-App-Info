@@ -16,6 +16,22 @@
 
 
  <div class="container py-5">
+    <!-- Tags populaires -->
+    @if (Model.PopularTags != null && Model.PopularTags.Any())
+    {
+        <section class="mb-5 py-4 bg-light rounded shadow-sm">
+            <h2 class="text-center mb-1 text-secondary fw-bold">Explorez par Catégorie</h2>
+            <p class="text-center mb-4 text-muted fst-italic">Découvrez nos annonces classées par les mots-clés les plus utilisés.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-2 px-3">
+                @foreach (var tag in Model.PopularTags)
+                {
+                    <a asp-controller="Listings" asp-action="Index" asp-route-SelectedTagIds="@tag.Id" class="btn btn-outline-primary btn-sm rounded-pill text-decoration-none">
+                        #@tag.Label
+                    </a>
+                }
+            </div>
+        </section>
+    }
 
     <!-- Dernières annonces -->
     <section class="mb-5">
@@ -57,23 +73,6 @@
             </div>
         }
     </section>
-
-    <!-- Tags populaires -->
-    @if (Model.PopularTags != null && Model.PopularTags.Any())
-    {
-        <section class="mb-5 py-4 bg-light rounded shadow-sm">
-            <h2 class="text-center mb-1 text-secondary fw-bold">Explorez par Catégorie</h2>
-            <p class="text-center mb-4 text-muted fst-italic">Découvrez nos annonces classées par les mots-clés les plus recherchés.</p>
-            <div class="d-flex flex-wrap justify-content-center gap-2 px-3">
-                @foreach (var tag in Model.PopularTags)
-                {
-                    <a asp-controller="Listings" asp-action="Index" asp-route-SelectedTagIds="@tag.Id" class="btn btn-outline-primary btn-sm rounded-pill text-decoration-none">
-                        #@tag.Label
-                    </a>
-                }
-            </div>
-        </section>
-    }
 
     <!-- Annonces populaires -->
     <section class="mb-5">

@@ -25,8 +25,8 @@ namespace Projet_mvc.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var recentListings = await _listingRepository.GetRecentListingsAsync(5);
-            var popularListing = await  _listingRepository.GetPopularListingsAsync(5);
+            var recentListings = await _listingRepository.GetRecentListingsAsync(8);
+            var popularListing = await  _listingRepository.GetPopularListingsAsync(8);
             var popularTags = await _tagRepository.GetPopularTagsAsync(8);
 
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
