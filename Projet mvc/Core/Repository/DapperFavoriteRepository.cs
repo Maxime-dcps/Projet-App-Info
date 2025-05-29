@@ -73,9 +73,5 @@ namespace Projet_mvc.Core.Repository
             var result = await connection.QueryAsync<Listing>(sql, new { UserId = userId });
             return result.ToList();
         }
-
-
-
-
     }
 }
