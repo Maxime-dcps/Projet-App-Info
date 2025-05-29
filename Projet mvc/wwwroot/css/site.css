@@ -10,10 +10,6 @@ html {
     }
 }
 
-body {
-    margin-bottom: 60px;
-}
-
 /* Focus styles communs */
 .btn:focus,
 .btn:active:focus,
@@ -31,6 +27,9 @@ body {
 
 .navbar .nav-item img {
     margin-left: 10px;
+    margin-right: 10px;
+    height: 50px;
+    border-radius: 50%;
 }
 
 /* Boutons login/logout */
@@ -40,25 +39,13 @@ body {
 }
 
 .btn-link-profile {
-    color: #171717;
-    font-weight: 500;
+    color: rgb(12, 109, 249);
     text-decoration: none;
 }
 
 .btn-link-profile:hover {
-    background-color: #b479bd;
     color: #5c3338;
     text-decoration: none;
-}
-
-.custom-link-register {
-    color: #0d6efd;
-    text-decoration: underline;
-}
-
-.custom-link-register:hover {
-    color: #0d6efd;
-    text-decoration: underline;
 }
 
 /* Sticky sidebar */
@@ -303,3 +290,43 @@ body {
     background-color: white;
     border: 1px solid #dee2e6;
 }
+
+.register-text {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+}
+
+/* Footer */
+
+.site-footer {
+  background-color: #f9fafb;
+  color: #6c757d;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  text-align: center;
+  border-top: 1px solid #dee2e6;
+}
+
+.site-footer a {
+  color: #0d6efd;
+  text-decoration: none;
+  margin: 0 0.25rem;
+  vertical-align: middle;
+}
+
+.site-footer a:hover,
+.site-footer a:focus {
+  text-decoration: underline;
+}
+
+.footer-content p {
+  margin: 0.2rem 0;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+

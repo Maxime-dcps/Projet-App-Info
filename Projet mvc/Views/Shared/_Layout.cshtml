@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,55 +26,71 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     <img src="~/images/Logo.png" alt="Logo" style="height: 80px" />
+                    <span class="ms-2">RetroSwap</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 align-items-center me-auto">       
+                    <ul class="navbar-nav flex-grow-1 align-items-center me-auto">
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Listings" asp-action="Index">Annonces</a>
+                            <a class="nav-link" asp-controller="Listings" asp-action="Index">Explorer</a>
                         </li>
                         
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Listings" asp-action="Create">Créer une annonce</a>
+                                <a class="nav-link" asp-controller="Listings" asp-action="Create">
+                                    Vendre
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Listings/Create">
+                                    Vendre
+
+                                </a>
                             </li>
                         }
                     </ul>
 
+                    <form class="d-flex ms-auto me-3 my-2 my-lg-0" method="get" asp-controller="Listings" asp-action="Index">
+                        <div class="input-group">
+                            <input class="form-control" type="search" placeholder="Rechercher" aria-label="Rechercher" name="SearchTerm">
+                            <button class="btn btn-primary input-group-text" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
 
                     <ul class="navbar-nav align-items-center">
 
                         @if (User.Identity.IsAuthenticated)
                         {                          
-                            <li class="nav-item">
-                                <span class="nav-link text-dark">Bienvenue, @User.Identity.Name</span>
+
+                            <li class=" nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Profile">
+                                    <img src="~/images/user_placeholder.png" alt="Logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="@User.Identity.Name" />
+                                </a>
                             </li>
                             
                             <li class="nav-item">
-                                <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Logout" method="post">                                   
-                                    <button type="submit" class="nav-link btn btn-link-profile">Se déconnecter</button>
+                                <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="nav-link btn btn-link-profile"><i class="fas fa-sign-out-alt fa-2x"></i></button>
                                 </form>
                             </li>
-
-                            <liv class=" nav-item">
-                                <a class="nav-link" asp-controller="Account" asp-action="Profile">
-                                    <img src="~/images/user_placeholder.png" alt="Logo" style="height: 50px; border-radius: 50%;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profil" />
-                                </a>
-                            </liv>                           
                         }
                         else
                         {                           
                             <li class="nav-item">
-                                <form class="form-inline" asp-area="" asp-controller="Account" asp-action="Login" method="get">
-                                    <button type="submit" class="nav-link btn btn-link-profile">Se connecter</button>
-                                    <img src="~/images/user_placeholder.png" alt="Logo" style="height: 50px; border-radius: 50%;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Profil" />
-                                </form>
+                                <a class="nav-item" asp-controller="Account" asp-action="Login">
+                                    <img src="~/images/user_placeholder.png" alt="Logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Connectez-vous" />
+                                </a>
                             </li>
-                            
                         }
                     </ul>
                 </div>
@@ -87,11 +103,19 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted align-items-center">
-        <div class="container ">
-            &copy; 2025 - Projet_mvc - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <p>&copy @DateTime.Now.Year RetroSwap - v1.0</p>
+            <p>contact@retroswap.be</p>
+            <p>
+                <a href="https://github.com/Maxime-dcps/Projet-App-Info" target="_blank" rel="noopener noreferrer" class="github-link" aria-label="GitHub">
+                    <i class="fa-brands fa-github"></i>
+                    GitHub
+                </a>
+            </p>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
